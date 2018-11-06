@@ -11,12 +11,12 @@ namespace Intro
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -25,7 +25,7 @@ namespace Intro
 
             services.AddDbContext<AccountingContext>(options => options.UseInMemoryDatabase("AccountDB"));
 
-            services.AddTransient<IAccountService>();
+            services.AddTransient<IAccountService, AccountService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
