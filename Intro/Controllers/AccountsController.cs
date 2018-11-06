@@ -1,6 +1,7 @@
 ﻿using Intro.Application.Services;
 using Intro.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Intro.Controllers
@@ -17,11 +18,14 @@ namespace Intro.Controllers
             _accountService = accountService;
         }
 
-        [HttpGet("{number}")]
-        public ActionResult<Account> Get(ulong number)
+        [HttpGet]
+        public ActionResult<IEnumerable<Account>> Get() => _accountService.GetAccounts()
+                .ToArray();
+
+        [HttpGet("{id}")]
+        public ActionResult<Account> Get(ulong id)
         {
-            var result = _accountService.Find(number)
-                .FirstOrDefault();
+            var result = _accountService.Find(id);
 
             if (result != null)
                 return result;
@@ -33,14 +37,14 @@ namespace Intro.Controllers
         public ActionResult<Account> Add(Account account)
         {
             _accountService.Add(account);
-            return account;
+            return CreatedAtAction("Add", new { id = account.Id }, account);
         }
 
-        [HttpPut]
-        public ActionResult<Account> Update(Account account)
+        [HttpPut("{id}")]
+        public ActionResult<Account> Update(ulong id, Account account)
         {
-
-            return account;
+            _accountService.Update(id, account);
+            return NoContent();
         }
 
     }
