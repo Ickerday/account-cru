@@ -1,38 +1,87 @@
 ﻿using Intro.Application.Services;
 using Intro.Controllers;
-using Intro.Core.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
+using static IntroTests.AccountHelpers;
 
 namespace IntroTests.Controllers
 {
     public class AccountsControllerTests
     {
-        private readonly IAccountService _accountService;
-        private readonly AccountsController _controller;
-
-        public AccountsControllerTests()
-        {
-            _accountService = Mock.Of<IAccountService>();
-            _controller = new AccountsController(_accountService);
-        }
+        private AccountsController _controller;
 
         [Theory]
-        [InlineData(0L, "", 0, 0, false)]
-        [InlineData(49203841098409218L, "test_value1", 123, 123, true)]
-        public void Controller__ShouldAddAccounts(ulong number, string name, decimal availableFunds, decimal balance, bool hasCard)
+        [InlineData(0UL, "yahoo", 0, 0, false)]
+        [InlineData(49203841098409218UL, "test_value1", 123, 123, true)]
+        public void Controller__ShouldAddAccounts(ulong id, string name, decimal availableFunds, decimal balance, bool hasCard)
         {
-            var account = Mock.Of<Account>(x => x.Name == name
-                && x.Number == number
-                && x.AvailableFunds == availableFunds
-                && x.Balance == balance
-                && x.HasCard == hasCard);
+            // Arrange
+            var account = GetMockAccount(id, name, availableFunds, balance, hasCard);
 
+            var mockService = new Mock<IAccountService>();
+            _controller = new AccountsController(mockService.Object);
+            // Act
+            var response = _controller.Add(account);
 
-            var result = _controller.Add(account);
+            // Assert
+            Assert.IsType<CreatedAtActionResult>(response.Result);
+        }
 
-            Assert.Equal(result.Value, account);
+        [Fact]
+        public void Controller__UpdatesAccounts()
+        {
+            // Arrange
+            var id = 49203841098409218UL;
+            var hasCard = true;
+
+            var oldName = "test_value1";
+            var oldFunds = 123;
+            var oldBalance = 456;
+
+            var newName = "test_value2";
+            var newFunds = 123123;
+            var newBalance = 456456;
+
+            var oldAccount = GetMockAccount(id, oldName, oldFunds, oldBalance, hasCard);
+            var newAccount = GetMockAccount(id, newName, newFunds, newBalance, hasCard);
+
+            var mockService = new Mock<IAccountService>();
+            mockService.Setup(x => x.Find(id))
+                .Returns(newAccount);
+
+            _controller = new AccountsController(mockService.Object);
+
+            // Act
+            var addResponse = _controller.Add(oldAccount);
+            var updateResponse = _controller.Update(id, newAccount);
+            var updatedAccount = _controller.Get(id);
+
+            // Assert
+            Assert.IsType<NoContentResult>(updateResponse.Result);
+            Assert.Equal(newAccount, updatedAccount.Value);
+        }
+
+        [Fact]
+        public void Controller__GetsAllAccounts()
+        {
+            {
+                // Arrange
+                var accountList = new[] { GetMockAccount(0, "test1", 123, 456, false) };
+
+                var mockService = new Mock<IAccountService>();
+                mockService.Setup(x => x.GetAccounts())
+                    .Returns(accountList);
+
+                _controller = new AccountsController(mockService.Object);
+                // Act
+                var response = _controller.Get();
+
+                // Assert
+                Assert.Equal(accountList, response.Value);
+            }
         }
 
     }
+
 }
