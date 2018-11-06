@@ -2,10 +2,10 @@
 {
     public class Account
     {
-        public ulong Number { get; set; }
+        public ulong Id { get; set; }
         public string Name { get; set; }
-        public decimal AvailableFunds { get; set; }
-        public decimal Balance { get; set; }
-        public bool HasCard { get; set; }
+        public decimal AvailableFunds { get; set; } = 0m;
+        public decimal Balance { get; set; } = 0m;
+        public bool HasCard { get; set; } = false;
     }
 }
