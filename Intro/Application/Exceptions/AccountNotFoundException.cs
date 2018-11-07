@@ -1,8 +1,9 @@
-﻿using System;
-
-namespace Intro.Application.Exceptions
+﻿namespace Intro.Application.Exceptions
 {
-    public class AccountNotFoundException : BusinessException
+    public class AccountNotFoundException : AccountException
     {
+        public AccountNotFoundException(string message) : base(message)
+        {
+        }
     }
 }
