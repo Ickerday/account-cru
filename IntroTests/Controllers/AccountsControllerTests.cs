@@ -52,7 +52,7 @@ namespace IntroTests.Controllers
 
             var mockLogger = new Mock<ILogger<AccountsController>>();
             var mockService = new Mock<IAccountService>();
-            mockService.Setup(x => x.Find(id))
+            mockService.Setup(x => x.GetBy(id))
                 .Returns(newAccount);
 
             _controller = new AccountsController(mockService.Object, mockLogger.Object);

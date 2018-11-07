@@ -1,8 +1,9 @@
-﻿using Intro.Core.Entities;
+﻿using Castle.Core.Internal;
+using Intro.Application.Exceptions;
+using Intro.Application.Queries;
+using Intro.Core.Entities;
 using Intro.Persistence;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Intro.Application.Services
 {
@@ -10,34 +11,44 @@ namespace Intro.Application.Services
     {
         IEnumerable<Account> GetAccounts();
         void Add(Account account);
-        Account Find(ulong id);
+        Account GetBy(ulong id);
         void Update(ulong id, Account account);
     }
 
     public class AccountService : IAccountService
     {
         private readonly AccountingContext _context;
+        private readonly IAccountQueries _accountQueries;
 
-        public AccountService(AccountingContext context) =>
+        public AccountService(AccountingContext context, IAccountQueries accountQueries)
+        {
             _context = context;
+            _accountQueries = accountQueries;
+        }
 
-        public IEnumerable<Account> GetAccounts() => _context.Accounts
-                .ToArray();
+        public IEnumerable<Account> GetAccounts() => _accountQueries.GetAll();
 
         public void Add(Account account)
         {
-            _context.Accounts
-              .Add(account);
+            if (!IsValid(account))
+                throw new AccountDataInvalidException();
 
-            _context.SaveChanges();
+
+        }
+
+        private static bool IsValid(Account account)
+        {
+            return account.Id > ulong.MinValue
+                   && !account.Name.IsNullOrEmpty()
+                   && account.AvailableFunds <= account.Balance;
         }
 
         public void Update(ulong id, Account newAccount)
         {
-            var oldAccount = Find(id);
+            var oldAccount = GetBy(id);
 
             if (oldAccount == null)
-                throw new ArgumentNullException(@"No Account with id {id} found");
+                throw new AccountNotFoundException($"No Account with id {id} found");
 
             MapAccount(newAccount, oldAccount);
 
@@ -53,7 +64,6 @@ namespace Intro.Application.Services
             oldAccount.HasCard = newAccount.HasCard;
         }
 
-        public Account Find(ulong id) => _context.Accounts
-            .Find(id);
+        public Account GetBy(ulong id) => _accountQueries.GetBy(id);
     }
 }
