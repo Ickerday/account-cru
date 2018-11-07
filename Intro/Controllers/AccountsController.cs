@@ -1,4 +1,5 @@
-﻿using Intro.Application.Services;
+﻿using Intro.Application.Exceptions;
+using Intro.Application.Services;
 using Intro.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -43,7 +44,14 @@ namespace Intro.Controllers
         [HttpPut("{id}")]
         public ActionResult<Account> Update(ulong id, Account account)
         {
-            _accountService.Update(id, account);
+            try
+            {
+                _accountService.Update(id, account);
+            }
+            catch (AccountNotFoundException)
+            {
+                return BadRequest();
+            }
             return NoContent();
         }
 
