@@ -25,6 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\..\..\.nuget\packages\castle.core\4.3.1\lib\netstandard1.5\Castle.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
