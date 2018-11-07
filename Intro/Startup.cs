@@ -1,3 +1,5 @@
+using Intro.Application.Commands;
+using Intro.Application.Queries;
 using Intro.Application.Services;
 using Intro.Persistence;
 using Microsoft.AspNetCore.Builder;
@@ -26,6 +28,8 @@ namespace Intro
             services.AddDbContext<AccountingContext>(options => options.UseInMemoryDatabase("AccountDB"));
 
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IAccountQueries, AccountQueries>();
+            services.AddTransient<IAccountCommands, AccountCommands>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

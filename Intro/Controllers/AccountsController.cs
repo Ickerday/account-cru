@@ -32,7 +32,7 @@ namespace Intro.Controllers
             }
             catch
             {
-                _logger.LogWarning("Couldn't get Accounts");
+                _logger.LogWarning("Couldn't get all Accounts");
                 return StatusCode(503);
             }
         }
@@ -42,7 +42,7 @@ namespace Intro.Controllers
         {
             try
             {
-                var result = _accountService.Find(id);
+                var result = _accountService.GetBy(id);
 
                 if (result != null)
                 {

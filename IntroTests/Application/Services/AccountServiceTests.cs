@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Xunit;
 using static IntroTests.AccountHelpers;
 
-namespace IntroTests
+namespace IntroTests.Application.Services
 {
     public class AccountServiceTests
     {
@@ -14,7 +14,7 @@ namespace IntroTests
         public void Service__AddsNewAccount()
         {
             // Arrange
-            var id = 49203841098409218UL;
+            const ulong id = 49203841098409218UL;
             var account = GetMockAccount(id, "test_value1", 123, 123, true);
 
             var options = new DbContextOptionsBuilder<AccountingContext>()
@@ -62,7 +62,7 @@ namespace IntroTests
         public void Service__GetsAccountById()
         {
             // Arrange
-            var id = 49203841098409218UL;
+            const ulong id = 49203841098409218UL;
             var account = GetMockAccount(id, "test_value1", 123, 123, true);
 
             var options = new DbContextOptionsBuilder<AccountingContext>()
@@ -76,7 +76,7 @@ namespace IntroTests
                 context.Add(account);
 
                 // Assert
-                Assert.Equal(_service.Find(id), account);
+                Assert.Equal(_service.GetBy(id), account);
             }
         }
 
@@ -84,16 +84,16 @@ namespace IntroTests
         public void Service__UpdatesAccount()
         {
             // Arrange
-            var id = 49203841098409218UL;
-            var hasCard = true;
+            const ulong id = 49203841098409218UL;
+            const bool hasCard = true;
 
-            var oldName = "test_value1";
-            var oldFunds = 123;
-            var oldBalance = 456;
+            const string oldName = "test_value1";
+            const decimal oldFunds = 123;
+            const decimal oldBalance = 456;
 
-            var newName = "test_value2";
-            var newFunds = 123123;
-            var newBalance = 456456;
+            const string newName = "test_value2";
+            const decimal newFunds = 123123;
+            const decimal newBalance = 456456;
 
             var oldAccount = GetMockAccount(id, oldName, oldFunds, oldBalance, hasCard);
             var newAccount = GetMockAccount(id, newName, newFunds, newBalance, hasCard);
