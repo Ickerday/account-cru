@@ -4,13 +4,14 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Web;
 using System;
+using static NLog.Web.NLogBuilder;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Intro
 {
     public class Program
     {
-        private static readonly Logger Logger = NLogBuilder.ConfigureNLog("nlog.config")
+        private static readonly Logger Logger = ConfigureNLog("nlog.config")
             .GetCurrentClassLogger();
 
         public static void Main(string[] args)
