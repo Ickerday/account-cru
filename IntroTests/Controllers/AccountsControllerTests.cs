@@ -39,16 +39,8 @@ namespace IntroTests.Controllers
             const ulong id = 49203841098409218UL;
             const bool hasCard = true;
 
-            const string oldName = "test_value1";
-            const int oldFunds = 123;
-            const int oldBalance = 456;
-
-            const string newName = "test_value2";
-            const int newFunds = 123123;
-            const int newBalance = 456456;
-
-            var oldAccount = GetMockAccount(id, oldName, oldFunds, oldBalance, hasCard);
-            var newAccount = GetMockAccount(id, newName, newFunds, newBalance, hasCard);
+            var oldAccount = GetMockAccount(id, "test_value1", 123m, 456m, hasCard);
+            var newAccount = GetMockAccount(id, "test_value2", 123123m, 456456m, hasCard);
 
             var mockLogger = new Mock<ILogger<AccountsController>>();
             var mockService = new Mock<IAccountService>();
@@ -58,7 +50,6 @@ namespace IntroTests.Controllers
             _controller = new AccountsController(mockService.Object, mockLogger.Object);
 
             // Act
-            _controller.Add(oldAccount);
             var updateResponse = _controller.Update(id, newAccount);
             var updatedAccount = _controller.Get(id);
 
