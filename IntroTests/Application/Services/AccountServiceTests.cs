@@ -1,6 +1,8 @@
-﻿using Intro.Application.Services;
-using Intro.Persistence;
-using Microsoft.EntityFrameworkCore;
+﻿using Intro.Application.Commands;
+using Intro.Application.Queries;
+using Intro.Application.Services;
+using Intro.Core.Entities;
+using Moq;
 using Xunit;
 using static IntroTests.AccountHelpers;
 
@@ -14,22 +16,18 @@ namespace IntroTests.Application.Services
         public void Service__AddsNewAccount()
         {
             // Arrange
-            const ulong id = 49203841098409218UL;
+            const ulong id = 49203849218UL;
             var account = GetMockAccount(id, "test_value1", 123, 123, true);
 
-            var options = new DbContextOptionsBuilder<AccountingContext>()
-                .UseInMemoryDatabase(databaseName: "AddsNewAccount")
-                .Options;
+            var mockQueries = new Mock<IAccountQueries>();
+            var mockCommands = new Mock<IAccountCommands>();
+            _service = new AccountService(mockQueries.Object, mockCommands.Object);
 
             // Act
-            using (var context = new AccountingContext(options))
-            {
-                _service = new AccountService(context);
-                _service.Add(account);
+            _service.Add(account);
 
-                // Assert
-                Assert.Equal(context.Accounts.Find(id), account);
-            }
+            // Assert
+            mockCommands.Verify(x => x.Add(account), Times.Once);
         }
 
         [Fact]
@@ -38,24 +36,23 @@ namespace IntroTests.Application.Services
             // Arrange
             var accountList = new[] {
                 GetMockAccount(0987890UL, "test1", 123m, 456m, false),
-                GetMockAccount(1987098UL, "test2", 789m, 010m, true)
+                GetMockAccount(1987098UL, "test2", 789m, 1011m, true)
             };
 
-            var options = new DbContextOptionsBuilder<AccountingContext>()
-                .UseInMemoryDatabase(databaseName: "GetsAllAccounts")
-                .Options;
+            var mockQueries = new Mock<IAccountQueries>();
+            var mockCommands = new Mock<IAccountCommands>();
+            mockQueries.Setup(x => x.GetAll())
+                .Returns(accountList);
+
+            _service = new AccountService(mockQueries.Object, mockCommands.Object);
 
             // Act
-            using (var context = new AccountingContext(options))
-            {
-                _service = new AccountService(context);
+            foreach (var account in accountList)
+                _service.Add(account);
 
-                foreach (var account in accountList)
-                    _service.Add(account);
-
-                // Assert
-                Assert.Equal(_service.GetAccounts(), accountList);
-            }
+            // Assert
+            mockCommands.Verify(x => x.Add(It.IsAny<Account>()), Times.Exactly(accountList.Length));
+            Assert.Equal(_service.GetAccounts(), accountList);
         }
 
         [Fact]
@@ -65,19 +62,19 @@ namespace IntroTests.Application.Services
             const ulong id = 49203841098409218UL;
             var account = GetMockAccount(id, "test_value1", 123, 123, true);
 
-            var options = new DbContextOptionsBuilder<AccountingContext>()
-                .UseInMemoryDatabase(databaseName: "GetsAccountById")
-                .Options;
+            var mockQueries = new Mock<IAccountQueries>();
+            mockQueries.Setup(x => x.GetBy(id))
+                .Returns(account);
+
+            var mockCommands = new Mock<IAccountCommands>();
+            _service = new AccountService(mockQueries.Object, mockCommands.Object);
 
             // Act
-            using (var context = new AccountingContext(options))
-            {
-                _service = new AccountService(context);
-                context.Add(account);
+            var result = _service.GetBy(id);
 
-                // Assert
-                Assert.Equal(_service.GetBy(id), account);
-            }
+            // Assert
+            mockQueries.Verify(x => x.GetBy(id), Times.Once);
+            Assert.Equal(account, result);
         }
 
         [Fact]
@@ -85,42 +82,20 @@ namespace IntroTests.Application.Services
         {
             // Arrange
             const ulong id = 49203841098409218UL;
-            const bool hasCard = true;
+            var newAccount = GetMockAccount(id, "test_value2", 123123, 456456, true);
 
-            const string oldName = "test_value1";
-            const decimal oldFunds = 123;
-            const decimal oldBalance = 456;
+            var mockQueries = new Mock<IAccountQueries>();
+            mockQueries.Setup(x => x.GetBy(id))
+                .Returns(newAccount);
 
-            const string newName = "test_value2";
-            const decimal newFunds = 123123;
-            const decimal newBalance = 456456;
-
-            var oldAccount = GetMockAccount(id, oldName, oldFunds, oldBalance, hasCard);
-            var newAccount = GetMockAccount(id, newName, newFunds, newBalance, hasCard);
-
-            var options = new DbContextOptionsBuilder<AccountingContext>()
-                .UseInMemoryDatabase(databaseName: "UpdatesAccount")
-                .Options;
+            var mockCommands = new Mock<IAccountCommands>();
+            _service = new AccountService(mockQueries.Object, mockCommands.Object);
 
             // Act
-            using (var context = new AccountingContext(options))
-            {
-                _service = new AccountService(context);
+            _service.Update(id, newAccount);
 
-                context.Add(oldAccount);
-                context.SaveChanges();
-
-                _service.Update(id, newAccount);
-
-                var updatedAccount = context.Accounts.Find(id);
-
-                // Assert
-                Assert.Equal(newAccount.Name, updatedAccount.Name);
-                Assert.Equal(newAccount.Balance, updatedAccount.Balance);
-                Assert.Equal(newAccount.AvailableFunds, updatedAccount.AvailableFunds);
-                Assert.Equal(newAccount.HasCard, updatedAccount.HasCard);
-
-            }
+            // Assert
+            mockCommands.Verify(x => x.Update(newAccount), Times.Once);
         }
     }
 }
