@@ -5,7 +5,8 @@ namespace Intro.Application.Commands
 {
     public interface IAccountCommands
     {
-
+        void Update(Account account);
+        void Add(Account account);
     }
 
     public class AccountCommands : IAccountCommands
@@ -22,6 +23,12 @@ namespace Intro.Application.Commands
             _context.Accounts
                 .Add(account);
 
+            _context.SaveChanges();
+        }
+
+        public void Update(Account account)
+        {
+            _context.Update(account);
             _context.SaveChanges();
         }
     }

@@ -1,8 +1,8 @@
 ﻿using Castle.Core.Internal;
+using Intro.Application.Commands;
 using Intro.Application.Exceptions;
 using Intro.Application.Queries;
 using Intro.Core.Entities;
-using Intro.Persistence;
 using System.Collections.Generic;
 
 namespace Intro.Application.Services
@@ -17,31 +17,28 @@ namespace Intro.Application.Services
 
     public class AccountService : IAccountService
     {
-        private readonly AccountingContext _context;
-        private readonly IAccountQueries _accountQueries;
+        private readonly IAccountQueries _queries;
+        private readonly IAccountCommands _commands;
 
-        public AccountService(AccountingContext context, IAccountQueries accountQueries)
+        public AccountService(IAccountQueries queries, IAccountCommands commands)
         {
-            _context = context;
-            _accountQueries = accountQueries;
+            _queries = queries;
+            _commands = commands;
         }
 
-        public IEnumerable<Account> GetAccounts() => _accountQueries.GetAll();
+        public IEnumerable<Account> GetAccounts() => _queries.GetAll();
 
         public void Add(Account account)
         {
             if (!IsValid(account))
                 throw new AccountDataInvalidException();
 
-
+            _commands.Add(account);
         }
 
-        private static bool IsValid(Account account)
-        {
-            return account.Id > ulong.MinValue
-                   && !account.Name.IsNullOrEmpty()
-                   && account.AvailableFunds <= account.Balance;
-        }
+        private static bool IsValid(Account account) => account.Id > ulong.MinValue
+            && !account.Name.IsNullOrEmpty()
+            && account.AvailableFunds <= account.Balance;
 
         public void Update(ulong id, Account newAccount)
         {
@@ -52,8 +49,7 @@ namespace Intro.Application.Services
 
             MapAccount(newAccount, oldAccount);
 
-            _context.Update(oldAccount);
-            _context.SaveChanges();
+            _commands.Update(oldAccount);
         }
 
         private static void MapAccount(Account newAccount, Account oldAccount)
@@ -64,6 +60,6 @@ namespace Intro.Application.Services
             oldAccount.HasCard = newAccount.HasCard;
         }
 
-        public Account GetBy(ulong id) => _accountQueries.GetBy(id);
+        public Account GetBy(ulong id) => _queries.GetBy(id);
     }
 }
