@@ -28,8 +28,8 @@ namespace Intro
             services.AddDbContext<AccountingContext>(options => options.UseInMemoryDatabase("AccountDB"));
 
             services.AddTransient<IAccountService, AccountService>();
-            services.AddTransient<IAccountQueries, AccountQueries>();
-            services.AddTransient<IAccountCommands, AccountCommands>();
+            services.AddTransient<IAccountQueries, EfAccountQueries>();
+            services.AddTransient<IAccountCommands, EfAccountCommands>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

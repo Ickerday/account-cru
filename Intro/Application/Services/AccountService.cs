@@ -45,7 +45,7 @@ namespace Intro.Application.Services
             var oldAccount = GetBy(id);
 
             if (oldAccount == null)
-                throw new AccountNotFoundException($"No Account with id {id} found");
+                throw new AccountNotFoundException($"No Account with ID {id} found");
 
             MapAccount(newAccount, oldAccount);
 

@@ -3,17 +3,11 @@ using Intro.Persistence;
 
 namespace Intro.Application.Commands
 {
-    public interface IAccountCommands
-    {
-        void Update(Account account);
-        void Add(Account account);
-    }
-
-    public class AccountCommands : IAccountCommands
+    public class EfAccountCommands : IAccountCommands
     {
         private readonly AccountingContext _context;
 
-        public AccountCommands(AccountingContext context)
+        public EfAccountCommands(AccountingContext context)
         {
             _context = context;
         }
