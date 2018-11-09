@@ -1,6 +1,6 @@
 ﻿using Intro.Application.Exceptions;
 using Intro.Core.Entities;
-using Intro.Persistence.MongoDb;
+using Intro.Persistence;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
@@ -8,10 +8,11 @@ namespace Intro.Application.Commands
 {
     public class MongoDbAccountCommands : IAccountCommands
     {
-        private readonly MongoDbContext _context;
+        private readonly IDbInfrastructure<IMongoCollection<Account>> _context;
         private readonly ILogger<MongoDbAccountCommands> _logger;
 
-        public MongoDbAccountCommands(MongoDbContext context, ILogger<MongoDbAccountCommands> logger)
+        public MongoDbAccountCommands(IDbInfrastructure<IMongoCollection<Account>> context,
+            ILogger<MongoDbAccountCommands> logger)
         {
             _context = context;
             _logger = logger;

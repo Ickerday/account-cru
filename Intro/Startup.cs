@@ -1,5 +1,6 @@
 using Intro.Application.Services;
 using Intro.Persistence.EfCore;
+using Intro.Persistence.MongoDb;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -22,10 +23,10 @@ namespace Intro
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddEfCore(Configuration.GetConnectionString("EfCore"));
-
             var mongoConfig = Configuration.GetSection("MongoDb");
-            // services.AddMongoDb(mongoConfig["ConnectionString"], mongoConfig["Database"]);
+            services.AddMongoDb(mongoConfig["ConnectionString"], mongoConfig["Database"]);
+
+            // services.AddEfCore(Configuration.GetConnectionString("EfCore"));
 
             services.AddScoped<IAccountService, AccountService>();
         }

@@ -1,5 +1,5 @@
 ﻿using Intro.Core.Entities;
-using Intro.Persistence.MongoDb;
+using Intro.Persistence;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -10,9 +10,9 @@ namespace Intro.Application.Queries
 {
     public class MongoDbAccountQueries : IAccountQueries
     {
-        private readonly MongoDbContext _context;
+        private readonly IDbInfrastructure<IMongoCollection<Account>> _context;
 
-        public MongoDbAccountQueries(MongoDbContext context)
+        public MongoDbAccountQueries(IDbInfrastructure<IMongoCollection<Account>> context)
         {
             _context = context;
         }

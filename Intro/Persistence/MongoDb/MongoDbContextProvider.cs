@@ -1,7 +1,4 @@
-﻿using Intro.Core.Entities;
-using MongoDB.Driver;
-
-namespace Intro.Persistence.MongoDb
+﻿namespace Intro.Persistence.MongoDb
 {
     public class MongoDbContextProvider
     {
@@ -14,6 +11,6 @@ namespace Intro.Persistence.MongoDb
             _dbName = dbName;
         }
 
-        public IDbInfrastructure<IMongoCollection<Account>> GetContext() => new MongoDbContext(_connectionString, _dbName);
+        public MongoDbContext GetContext() => new MongoDbContext(_connectionString, _dbName);
     }
 }
