@@ -1,5 +1,5 @@
 ﻿using Intro.Core.Entities;
-using Intro.Persistence;
+using Intro.Persistence.EfCore;
 using System.Collections.Generic;
 using System.Linq;
 

@@ -1,5 +1,4 @@
-﻿using Castle.Core.Internal;
-using Intro.Application.Commands;
+﻿using Intro.Application.Commands;
 using Intro.Application.Exceptions;
 using Intro.Application.Queries;
 using Intro.Core.Entities;
@@ -9,7 +8,7 @@ namespace Intro.Application.Services
 {
     public interface IAccountService
     {
-        IEnumerable<Account> GetAccounts();
+        IEnumerable<Account> GetAll();
         void Add(Account account);
         Account GetBy(ulong id);
         void Update(ulong id, Account account);
@@ -26,7 +25,7 @@ namespace Intro.Application.Services
             _commands = commands;
         }
 
-        public IEnumerable<Account> GetAccounts() => _queries.GetAll();
+        public IEnumerable<Account> GetAll() => _queries.GetAll();
 
         public void Add(Account account)
         {
@@ -37,7 +36,7 @@ namespace Intro.Application.Services
         }
 
         private static bool IsValid(Account account) => account.Id > ulong.MinValue
-            && !account.Name.IsNullOrEmpty()
+            && !string.IsNullOrWhiteSpace(account.Name)
             && account.AvailableFunds <= account.Balance;
 
         public void Update(ulong id, Account newAccount)

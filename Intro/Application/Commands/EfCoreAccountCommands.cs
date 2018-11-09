@@ -1,13 +1,13 @@
 ﻿using Intro.Core.Entities;
-using Intro.Persistence;
+using Intro.Persistence.EfCore;
 
 namespace Intro.Application.Commands
 {
-    public class EfAccountCommands : IAccountCommands
+    public class EfCoreAccountCommands : IAccountCommands
     {
         private readonly AccountingContext _context;
 
-        public EfAccountCommands(AccountingContext context)
+        public EfCoreAccountCommands(AccountingContext context)
         {
             _context = context;
         }
