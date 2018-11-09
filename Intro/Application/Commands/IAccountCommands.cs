@@ -2,7 +2,9 @@
 
 namespace Intro.Application.Commands
 {
-    public interface IAccountCommands : ICommands<Account>
+    public interface IAccountCommands
     {
+        void Update(Account account);
+        void Add(Account account);
     }
 }
