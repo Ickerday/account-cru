@@ -1,11 +1,8 @@
-using Intro.Application.Commands;
-using Intro.Application.Queries;
 using Intro.Application.Services;
-using Intro.Persistence;
+using Intro.Persistence.EfCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,11 +22,12 @@ namespace Intro
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddDbContext<AccountingContext>(options => options.UseInMemoryDatabase("AccountDB"));
+            services.AddEfCore(Configuration.GetConnectionString("EfCore"));
 
-            services.AddTransient<IAccountService, AccountService>();
-            services.AddTransient<IAccountQueries, EfAccountQueries>();
-            services.AddTransient<IAccountCommands, EfAccountCommands>();
+            var mongoConfig = Configuration.GetSection("MongoDb");
+            // services.AddMongoDb(mongoConfig["ConnectionString"], mongoConfig["Database"]);
+
+            services.AddScoped<IAccountService, AccountService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
