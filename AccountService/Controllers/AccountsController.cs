@@ -1,10 +1,10 @@
-﻿using AccountService.Application.Exceptions;
-using AccountService.Application.Services;
-using AccountService.Core.Entities;
+﻿using AccountService.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
+using AccountService.Core.Entities;
+using AccountService.Core.Exceptions;
 
 namespace AccountService.Controllers
 {
