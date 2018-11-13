@@ -1,9 +1,9 @@
-﻿using System;
+using AccountService.Core.Persistence;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using AccountService.Core.Entities;
-using AccountService.Persistence;
 using MongoDB.Driver;
 
 namespace AccountService.Application.Queries

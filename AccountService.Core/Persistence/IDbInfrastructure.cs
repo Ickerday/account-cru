@@ -1,4 +1,4 @@
-﻿namespace AccountService.Persistence
+﻿namespace AccountService.Core.Persistence
 {
     public interface IDbInfrastructure<out TCollection>
     {
