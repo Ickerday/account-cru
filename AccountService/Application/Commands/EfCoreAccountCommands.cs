@@ -1,4 +1,4 @@
-﻿using AccountService.Core.Entities;
+using AccountService.Core.Entities;
 using AccountService.Core.Exceptions;
 using AccountService.Persistence.EfCore;
 using Microsoft.Extensions.Logging;
@@ -31,12 +31,12 @@ namespace AccountService.Application.Commands
         public void Update(ulong id, Account newAccount)
         {
             var oldAccount = _context.Accounts.Find(id);
-
             if (oldAccount == null)
                 throw new AccountNotFoundException($"No Account with ID {id} found");
 
             AccountHelpers.MapAccount(newAccount, oldAccount);
 
+            _logger.LogInformation($"Updating account with ID {id}");
             _context.Update(oldAccount);
             _context.SaveChanges();
         }

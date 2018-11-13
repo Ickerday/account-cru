@@ -1,4 +1,4 @@
-using AccountService.Core.Entities;
+﻿using AccountService.Core.Entities;
 using AccountService.Core.Exceptions;
 using AccountService.Core.Persistence;
 using Microsoft.Extensions.Logging;
@@ -6,7 +6,7 @@ using MongoDB.Driver;
 
 namespace AccountService.Application.Commands
 {
-    public class MongoDbAccountCommands : IAccountCommands
+    public sealed class MongoDbAccountCommands : IAccountCommands
     {
         private readonly IDbInfrastructure<IMongoCollection<Account>> _context;
         private readonly ILogger<MongoDbAccountCommands> _logger;
@@ -20,7 +20,7 @@ namespace AccountService.Application.Commands
 
         public void Update(ulong id, Account account)
         {
-            _logger.LogInformation($"Updating account with ID {account.Id} in {_context.GetType().FullName}");
+            _logger.LogInformation($"Updating account with ID {account.Id}");
             var result = _context.Accounts
                 .ReplaceOne(x => x.Id == account.Id, account)
                 .ModifiedCount;
@@ -36,13 +36,13 @@ namespace AccountService.Application.Commands
         {
             try
             {
-                _logger.LogInformation($"Adding account with ID {account.Id} to {_context.GetType().FullName}");
+                _logger.LogInformation($"Adding account with ID {account.Id}");
                 _context.Accounts
                     .InsertOne(account);
             }
             catch (MongoWriteException ex)
             {
-                _logger.LogWarning($"No account with ID {account.Id} found or data was invalid");
+                _logger.LogWarning($"Couldn't insert new Account with ID {account.Id}");
                 throw new AccountException("Couldn't update Account", ex);
             }
         }
