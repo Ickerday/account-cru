@@ -1,4 +1,3 @@
-using AccountService.Application.Services;
 using AccountService.Persistence.MongoDb;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,7 +26,6 @@ namespace AccountService
 
             // services.AddEfCore(Configuration.GetConnectionString("EfCore"));
 
-            services.AddScoped<IAccountService, Application.Services.AccountService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
