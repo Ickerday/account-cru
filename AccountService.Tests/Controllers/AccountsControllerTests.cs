@@ -1,6 +1,6 @@
-﻿using Intro.Application.Services;
-using Intro.Controllers;
-using IntroTests;
+﻿using AccountService.Application.Commands;
+using AccountService.Application.Queries;
+using AccountService.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -21,9 +21,10 @@ namespace AccountService.Tests.Controllers
             var account = AccountHelpers.GetMockAccount(id, name, availableFunds, balance, hasCard);
 
             var mockLogger = new Mock<ILogger<AccountsController>>();
-            var mockService = new Mock<IAccountService>();
+            var mockCommands = new Mock<IAccountCommands>();
+            var mockQueries = new Mock<IAccountQueries>();
 
-            _controller = new AccountsController(mockService.Object, mockLogger.Object);
+            _controller = new AccountsController(mockCommands.Object, mockQueries.Object, mockLogger.Object);
 
             // Act
             var response = _controller.Add(account);
@@ -39,23 +40,23 @@ namespace AccountService.Tests.Controllers
             const ulong id = 49203841098409218UL;
             const bool hasCard = true;
 
-            var oldAccount = AccountHelpers.GetMockAccount(id, "test_value1", 123m, 456m, hasCard);
             var newAccount = AccountHelpers.GetMockAccount(id, "test_value2", 123123m, 456456m, hasCard);
 
             var mockLogger = new Mock<ILogger<AccountsController>>();
-            var mockService = new Mock<IAccountService>();
-            mockService.Setup(x => x.GetBy(id))
+            var mockCommands = new Mock<IAccountCommands>();
+            var mockQueries = new Mock<IAccountQueries>();
+            mockQueries.Setup(x => x.GetBy(id))
                 .Returns(newAccount);
 
-            _controller = new AccountsController(mockService.Object, mockLogger.Object);
+            _controller = new AccountsController(mockCommands.Object, mockQueries.Object, mockLogger.Object);
 
             // Act
             var updateResponse = _controller.Update(id, newAccount);
-            var updatedAccount = _controller.Get(id);
+            var updatedAccount = _controller.Get(id).Value;
 
             // Assert
             Assert.IsType<NoContentResult>(updateResponse.Result);
-            Assert.Equal(newAccount, updatedAccount.Value);
+            AccountHelpers.AreSame(newAccount, updatedAccount);
         }
 
         [Fact]
@@ -66,11 +67,12 @@ namespace AccountService.Tests.Controllers
                 var accountList = new[] { AccountHelpers.GetMockAccount(0, "test1", 123, 456, false) };
 
                 var mockLogger = new Mock<ILogger<AccountsController>>();
-                var mockService = new Mock<IAccountService>();
-                mockService.Setup(x => x.GetAll())
+                var mockCommands = new Mock<IAccountCommands>();
+                var mockQueries = new Mock<IAccountQueries>();
+                mockQueries.Setup(x => x.GetAll())
                     .Returns(accountList);
 
-                _controller = new AccountsController(mockService.Object, mockLogger.Object);
+                _controller = new AccountsController(mockCommands.Object, mockQueries.Object, mockLogger.Object);
 
                 // Act
                 var response = _controller.Get();
