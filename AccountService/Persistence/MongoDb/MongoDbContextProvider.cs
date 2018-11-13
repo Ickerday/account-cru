@@ -1,6 +1,6 @@
 ﻿namespace AccountService.Persistence.MongoDb
 {
-    public class MongoDbContextProvider
+    public sealed class MongoDbContextProvider
     {
         private readonly string _connectionString;
         private readonly string _dbName;

@@ -12,7 +12,7 @@ namespace AccountService.Controllers
     [Produces("text/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public sealed class AccountsController : ControllerBase
     {
         private readonly ILogger<AccountsController> _logger;
         private readonly IAccountCommands _commands;

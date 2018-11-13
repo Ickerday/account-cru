@@ -1,9 +1,10 @@
 ﻿using AccountService.Core.Entities;
+using AccountService.Core.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace AccountService.Persistence.EfCore
 {
-    public class AccountingContext : DbContext, IDbInfrastructure<DbSet<Account>>
+    public sealed class AccountingContext : DbContext, IDbInfrastructure<DbSet<Account>>
     {
         public DbSet<Account> Accounts { get; set; }
 

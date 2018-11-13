@@ -1,10 +1,11 @@
 ﻿using System;
 using AccountService.Core.Entities;
+using AccountService.Core.Persistence;
 using MongoDB.Driver;
 
 namespace AccountService.Persistence.MongoDb
 {
-    public class MongoDbContext : IDbInfrastructure<IMongoCollection<Account>>
+    public sealed class MongoDbContext : IDbInfrastructure<IMongoCollection<Account>>
     {
         private readonly IMongoDatabase _db;
 
