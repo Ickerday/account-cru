@@ -18,7 +18,7 @@ namespace AccountService.Application.Commands
             _logger = logger;
         }
 
-        public void Update(Account account)
+        public void Update(ulong id, Account account)
         {
             _logger.LogInformation($"Updating account with ID {account.Id} in {_context.GetType().FullName}");
             var result = _context.Accounts
@@ -34,9 +34,17 @@ namespace AccountService.Application.Commands
 
         public void Add(Account account)
         {
-            _logger.LogInformation($"Adding account with ID {account.Id} to {_context.GetType().FullName}");
-            _context.Accounts
-                .InsertOne(account);
+            try
+            {
+                _logger.LogInformation($"Adding account with ID {account.Id} to {_context.GetType().FullName}");
+                _context.Accounts
+                    .InsertOne(account);
+            }
+            catch (MongoWriteException ex)
+            {
+                _logger.LogWarning($"No account with ID {account.Id} found or data was invalid");
+                throw new AccountException("Couldn't update Account", ex);
+            }
         }
     }
 }

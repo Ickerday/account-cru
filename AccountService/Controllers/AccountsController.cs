@@ -1,10 +1,12 @@
-﻿using AccountService.Application.Services;
+﻿using AccountService.Application.Commands;
+using AccountService.Application.Queries;
+using AccountService.Application.Services;
+using AccountService.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using AccountService.Core.Entities;
-using AccountService.Core.Exceptions;
 
 namespace AccountService.Controllers
 {
@@ -14,12 +16,16 @@ namespace AccountService.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly ILogger<AccountsController> _logger;
-        private readonly IAccountService _accountService;
+        private readonly IAccountCommands _commands;
+        private readonly IAccountQueries _queries;
 
-        public AccountsController(IAccountService accountService, ILogger<AccountsController> logger)
+        public AccountsController(IAccountCommands commands,
+            IAccountQueries queries,
+            ILogger<AccountsController> logger)
         {
             _logger = logger;
-            _accountService = accountService;
+            _commands = commands;
+            _queries = queries;
         }
 
         [HttpGet]
@@ -27,12 +33,12 @@ namespace AccountService.Controllers
         {
             try
             {
-                return _accountService.GetAll()
+                return _queries.GetAll()
                     .ToArray();
             }
-            catch
+            catch (Exception ex)
             {
-                _logger.LogWarning("Couldn't get all Accounts");
+                _logger.LogError("Couldn't get all Accounts", ex);
                 return StatusCode(503);
             }
         }
@@ -42,7 +48,7 @@ namespace AccountService.Controllers
         {
             try
             {
-                var result = _accountService.GetBy(id);
+                var result = _queries.GetBy(id);
 
                 if (result != null)
                 {
@@ -53,9 +59,9 @@ namespace AccountService.Controllers
                 _logger.LogWarning($"Couldn't find Account with ID {id}");
                 return NotFound();
             }
-            catch
+            catch (Exception ex)
             {
-                _logger.LogWarning($"Invalid request for Account with ID {id}");
+                _logger.LogError($"Invalid request for Account with ID {id}", ex);
                 return BadRequest();
             }
         }
@@ -65,12 +71,12 @@ namespace AccountService.Controllers
         {
             try
             {
-                _accountService.Add(account);
-                _logger.LogInformation($"Created Account with ID {account.Id}");
+                _commands.Add(account);
                 return CreatedAtAction("Add", new { id = account.Id }, account);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError($"Couldn't create Account with ID {account.Id}", ex);
                 return BadRequest();
             }
         }
@@ -80,11 +86,11 @@ namespace AccountService.Controllers
         {
             try
             {
-                _accountService.Update(id, account);
+                _commands.Update(id, account);
             }
-            catch (AccountException)
+            catch (Exception ex)
             {
-                _logger.LogWarning($"Couldn't update Account with ID {id}");
+                _logger.LogError($"Couldn't update Account with ID {id}", ex);
                 return BadRequest();
             }
 

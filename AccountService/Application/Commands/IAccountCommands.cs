@@ -4,7 +4,7 @@ namespace AccountService.Application.Commands
 {
     public interface IAccountCommands
     {
-        void Update(Account account);
+        void Update(ulong id, Account account);
         void Add(Account account);
     }
 }
