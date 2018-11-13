@@ -27,7 +27,7 @@ namespace Intro.Controllers
         {
             try
             {
-                return _accountService.GetAccounts()
+                return _accountService.GetAll()
                     .ToArray();
             }
             catch
@@ -81,7 +81,6 @@ namespace Intro.Controllers
             try
             {
                 _accountService.Update(id, account);
-                _logger.LogInformation($"Updated Account with ID {id}");
             }
             catch (AccountNotFoundException)
             {
@@ -89,7 +88,7 @@ namespace Intro.Controllers
                 return BadRequest();
             }
 
-            // log here
+            _logger.LogInformation($"Updated Account with ID {id}");
             return NoContent();
         }
     }

@@ -1,19 +1,13 @@
 ﻿using Intro.Core.Entities;
-using Intro.Persistence;
+using Intro.Persistence.EfCore;
 
 namespace Intro.Application.Commands
 {
-    public interface IAccountCommands
-    {
-        void Update(Account account);
-        void Add(Account account);
-    }
-
-    public class AccountCommands : IAccountCommands
+    public class EfCoreAccountCommands : IAccountCommands
     {
         private readonly AccountingContext _context;
 
-        public AccountCommands(AccountingContext context)
+        public EfCoreAccountCommands(AccountingContext context)
         {
             _context = context;
         }

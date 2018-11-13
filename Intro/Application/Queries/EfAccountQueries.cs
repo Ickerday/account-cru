@@ -1,25 +1,16 @@
 ﻿using Intro.Core.Entities;
-using Intro.Persistence;
-using Microsoft.Extensions.Logging;
+using Intro.Persistence.EfCore;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Intro.Application.Queries
 {
-    public interface IAccountQueries
+    public class EfAccountQueries : IAccountQueries
     {
-        IEnumerable<Account> GetAll();
-        Account GetBy(ulong id);
-    }
-
-    public class AccountQueries : IAccountQueries
-    {
-        private readonly ILogger<IAccountQueries> _logger;
         private readonly AccountingContext _context;
 
-        public AccountQueries(AccountingContext context, ILogger<IAccountQueries> logger)
+        public EfAccountQueries(AccountingContext context)
         {
-            _logger = logger;
             _context = context;
         }
 
