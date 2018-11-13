@@ -17,6 +17,11 @@ namespace AccountService.Persistence.EfCore
             services.AddDbContext<AccountingContext>
                 (options => options.UseSqlServer(connectionString));
 
+            AddCqrs(services);
+        }
+
+        private static void AddCqrs(IServiceCollection services)
+        {
             services.AddScoped<IAccountCommands, EfCoreAccountCommands>();
             services.AddScoped<IAccountQueries, EfAccountQueries>();
         }

@@ -1,6 +1,7 @@
 ﻿using AccountService.Application.Commands;
 using AccountService.Application.Queries;
 using AccountService.Core.Entities;
+using AccountService.Core.Persistence;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 
@@ -13,8 +14,13 @@ namespace AccountService.Persistence.MongoDb
             services.AddTransient<IDbInfrastructure<IMongoCollection<Account>>, MongoDbContext>
                 (x => new MongoDbContextProvider(connStr, dbName).GetContext());
 
-            services.AddTransient<IAccountCommands, MongoDbAccountCommands>();
-            services.AddTransient<IAccountQueries, MongoDbAccountQueries>();
+            AddCqrs(services);
+        }
+
+        private static void AddCqrs(IServiceCollection services)
+        {
+            services.AddScoped<IAccountCommands, MongoDbAccountCommands>();
+            services.AddScoped<IAccountQueries, MongoDbAccountQueries>();
         }
     }
 }
