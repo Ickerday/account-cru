@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using AccountService.Application.Commands;
-using AccountService.Application.Exceptions;
 using AccountService.Application.Queries;
 using AccountService.Core.Entities;
+using AccountService.Core.Exceptions;
 
 namespace AccountService.Application.Services
 {
