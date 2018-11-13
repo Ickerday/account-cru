@@ -7,9 +7,9 @@ namespace AccountService.Core.Entities
         [BsonId]
         public ulong Id { get; set; }
         public string Name { get; set; }
-        public decimal AvailableFunds { get; set; } = 0m;
-        public decimal Balance { get; set; } = 0m;
-        public bool HasCard { get; set; } = false;
+        public decimal AvailableFunds { get; set; }
+        public decimal Balance { get; set; }
+        public bool HasCard { get; set; }
     }
 
     public static class AccountHelpers
