@@ -1,6 +1,7 @@
 ﻿using AccountService.Core.Commands;
 using AccountService.Core.Entities;
 using AccountService.Core.Queries;
+using AccountService.Search;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -95,6 +96,17 @@ namespace AccountService.Controllers
 
             _logger.LogInformation($"Updated Account with ID {id}");
             return NoContent();
+        }
+
+        [HttpGet("spec")]
+        public ActionResult<IEnumerable<Account>> SpecificationTest()
+        {
+            var spec = new AccountBalanceAtLeastSpecification(decimal.MinValue);
+            var spec2 = new AccountIdMatchesSpecification(0UL);
+            spec.IsSatisfiedBy(new Account());
+
+            return _queries.FindWith(spec.And(spec2))
+                .ToArray();
         }
     }
 }
