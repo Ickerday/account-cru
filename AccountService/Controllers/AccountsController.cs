@@ -1,6 +1,6 @@
-﻿using AccountService.Application.Commands;
-using AccountService.Application.Queries;
+﻿using AccountService.Core.Commands;
 using AccountService.Core.Entities;
+using AccountService.Core.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -9,17 +9,17 @@ using System.Linq;
 
 namespace AccountService.Controllers
 {
+    [ApiController]
     [Produces("text/json")]
     [Route("api/[controller]")]
-    [ApiController]
     public sealed class AccountsController : ControllerBase
     {
         private readonly ILogger<AccountsController> _logger;
-        private readonly IAccountCommands _commands;
-        private readonly IAccountQueries _queries;
+        private readonly ICommands<Account> _commands;
+        private readonly IQueries<Account> _queries;
 
-        public AccountsController(IAccountCommands commands,
-            IAccountQueries queries,
+        public AccountsController(ICommands<Account> commands,
+            IQueries<Account> queries,
             ILogger<AccountsController> logger)
         {
             _logger = logger;

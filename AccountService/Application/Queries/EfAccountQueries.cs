@@ -1,5 +1,6 @@
 using AccountService.Core.Entities;
 using AccountService.Core.Exceptions.Account;
+using AccountService.Core.Queries;
 using AccountService.Core.Search;
 using AccountService.Persistence.EfCore;
 using Microsoft.Extensions.Logging;
@@ -8,7 +9,7 @@ using System.Linq;
 
 namespace AccountService.Application.Queries
 {
-    public class EfAccountQueries : IAccountQueries
+    public class EfAccountQueries : IQueries<Account>
     {
         private readonly AccountingContext _context;
         private readonly ILogger<EfAccountQueries> _logger;

@@ -1,6 +1,9 @@
 using AccountService.Core.Entities;
 using AccountService.Core.Exceptions.Account;
 using AccountService.Core.Persistence;
+using AccountService.Core.Queries;
+using AccountService.Core.Search;
+using AccountService.Search;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System;
@@ -10,7 +13,7 @@ using System.Linq.Expressions;
 
 namespace AccountService.Application.Queries
 {
-    public class MongoDbAccountQueries : IAccountQueries
+    public class MongoDbAccountQueries : IQueries<Account>
     {
         private readonly IDbInfrastructure<IMongoCollection<Account>> _context;
         private readonly ILogger<MongoDbAccountQueries> _logger;

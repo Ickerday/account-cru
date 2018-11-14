@@ -1,6 +1,7 @@
-﻿using AccountService.Application.Commands;
-using AccountService.Application.Queries;
-using AccountService.Controllers;
+﻿using AccountService.Controllers;
+using AccountService.Core.Commands;
+using AccountService.Core.Entities;
+using AccountService.Core.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -21,8 +22,8 @@ namespace AccountService.Tests.Controllers
             var account = AccountHelpers.GetMockAccount(id, name, availableFunds, balance, hasCard);
 
             var mockLogger = new Mock<ILogger<AccountsController>>();
-            var mockCommands = new Mock<IAccountCommands>();
-            var mockQueries = new Mock<IAccountQueries>();
+            var mockCommands = new Mock<ICommands<Account>>();
+            var mockQueries = new Mock<IQueries<Account>>();
 
             _controller = new AccountsController(mockCommands.Object, mockQueries.Object, mockLogger.Object);
 
@@ -43,8 +44,8 @@ namespace AccountService.Tests.Controllers
             var newAccount = AccountHelpers.GetMockAccount(id, "test_value2", 123123m, 456456m, hasCard);
 
             var mockLogger = new Mock<ILogger<AccountsController>>();
-            var mockCommands = new Mock<IAccountCommands>();
-            var mockQueries = new Mock<IAccountQueries>();
+            var mockCommands = new Mock<ICommands<Account>>();
+            var mockQueries = new Mock<IQueries<Account>>();
             mockQueries.Setup(x => x.GetBy(id))
                 .Returns(newAccount);
 
@@ -67,8 +68,8 @@ namespace AccountService.Tests.Controllers
                 var accountList = new[] { AccountHelpers.GetMockAccount(0, "test1", 123, 456, false) };
 
                 var mockLogger = new Mock<ILogger<AccountsController>>();
-                var mockCommands = new Mock<IAccountCommands>();
-                var mockQueries = new Mock<IAccountQueries>();
+                var mockCommands = new Mock<ICommands<Account>>();
+                var mockQueries = new Mock<IQueries<Account>>();
                 mockQueries.Setup(x => x.GetAll())
                     .Returns(accountList);
 
