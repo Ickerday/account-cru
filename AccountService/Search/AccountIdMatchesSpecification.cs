@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace AccountService.Search
 {
-    public class AccountIdMatchesSpecification : ISpecification<Account>
+    public class AccountIdMatchesSpecification : Specification<Account>
     {
         public ulong Id { get; }
 
@@ -14,25 +14,7 @@ namespace AccountService.Search
             Id = id;
         }
 
-        public bool IsSatisfiedBy(Account account) => ToExpression().Compile()
-            .Invoke(account);
-
-        public Expression<Func<Account, bool>> ToExpression() =>
+        public override Expression<Func<Account, bool>> ToExpression() =>
             x => x.Id == Id;
-
-        public ISpecification<Account> And(ISpecification<Account> specification)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ISpecification<Account> Or(ISpecification<Account> specification)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ISpecification<Account> Not(ISpecification<Account> specification)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

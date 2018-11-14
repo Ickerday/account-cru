@@ -1,37 +1,28 @@
 ﻿using System;
 using System.Linq.Expressions;
-using AccountService.Core.Exceptions.Specification;
 
 namespace AccountService.Core.Search
 {
-    public abstract class Specification<T> : ISpecification<T>
+    public abstract class Specification<T>
     {
         public bool IsSatisfiedBy(T entity)
         {
             if (entity == null)
-                throw new InvalidSpecificationException();
+                throw new ArgumentNullException(nameof(entity));
+
             return ToExpression().Compile()
                 .Invoke(entity);
         }
 
         public abstract Expression<Func<T, bool>> ToExpression();
 
-        public ISpecification<T> And(ISpecification<T> specification)
-        {
-            return new AndSpecification<T>(this, specification);
-        }
+        public Specification<T> And(Specification<T> specification) =>
+            new AndSpecification<T>(this, specification);
 
-        public ISpecification<T> Or(ISpecification<T> specification)
-        {
+        public Specification<T> Or(Specification<T> specification) =>
             throw new NotImplementedException();
-        }
 
-        public ISpecification<T> Not(ISpecification<T> specification)
-        {
+        public Specification<T> Not(Specification<T> specification) =>
             throw new NotImplementedException();
-        }
     }
-
-
-
 }
