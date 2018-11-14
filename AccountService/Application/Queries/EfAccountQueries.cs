@@ -1,5 +1,6 @@
 using AccountService.Core.Entities;
-using AccountService.Core.Exceptions;
+using AccountService.Core.Exceptions.Account;
+using AccountService.Core.Search;
 using AccountService.Persistence.EfCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;

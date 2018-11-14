@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AccountService.Core.Exceptions
+namespace AccountService.Core.Exceptions.Account
 {
     public class AccountNotFoundException : AccountException
     {

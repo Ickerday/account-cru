@@ -1,5 +1,5 @@
 using AccountService.Core.Entities;
-using AccountService.Core.Exceptions;
+using AccountService.Core.Exceptions.Account;
 using AccountService.Core.Persistence;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
