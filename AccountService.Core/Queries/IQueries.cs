@@ -8,6 +8,6 @@ namespace AccountService.Core.Queries
     {
         IEnumerable<TEntity> GetAll();
         TEntity GetBy(ulong id);
-        IEnumerable<TEntity> FindWith(ISpecification<Account> specification);
+        IEnumerable<TEntity> FindWith(Specification<Account> specification);
     }
 }

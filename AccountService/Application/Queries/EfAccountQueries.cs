@@ -39,7 +39,7 @@ namespace AccountService.Application.Queries
             return result;
         }
 
-        public IEnumerable<Account> FindWith(ISpecification<Account> specification)
+        public IEnumerable<Account> FindWith(Specification<Account> specification)
         {
             _logger.LogInformation($"Searching for Accounts following a {specification.GetType().FullName}");
             return _context.Accounts
