@@ -28,14 +28,15 @@ namespace AccountService.Application.Queries
         public IEnumerable<Account> GetAll()
         {
             _logger.LogInformation("Getting all Accounts");
-            return Get(_ => true)
+            return FindWith(_ => true)
                 .ToArray();
         }
 
         public Account GetBy(ulong id)
         {
             _logger.LogInformation($"Searching for Account with ID {id}");
-            var result = Get(x => x.Id == id)
+            var spec = new AccountIdMatchesSpecification(id);
+            var result = FindWith(spec)
                 .FirstOrDefault();
 
             if (result == null)
@@ -44,11 +45,22 @@ namespace AccountService.Application.Queries
             return result;
         }
 
-        private IEnumerable<Account> Get(Expression<Func<Account, bool>> filter)
+        public IEnumerable<Account> FindWith(ISpecification<Account> specification)
         {
-            var documents = _context.Accounts;
+            _logger.LogInformation($"Searching for Accounts following a {specification.GetType().FullName}");
             var result = new List<Account>();
-            using (var cursor = documents.FindSync(filter))
+            using (var cursor = _context.Accounts.FindSync(specification.ToExpression()))
+                while (cursor.MoveNext())
+                    result.AddRange(cursor.Current);
+
+            return result;
+        }
+
+        private IEnumerable<Account> FindWith(Expression<Func<Account, bool>> filter)
+        {
+            _logger.LogInformation($"Searching for Accounts with a {filter.GetType().FullName}");
+            var result = new List<Account>();
+            using (var cursor = _context.Accounts.FindSync(filter))
                 while (cursor.MoveNext())
                     result.AddRange(cursor.Current);
 

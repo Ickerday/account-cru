@@ -33,10 +33,18 @@ namespace AccountService.Application.Queries
             var result = _context.Accounts
                 .Find(id);
 
-            if (result != null)
+            if (result == null)
                 throw new AccountNotFoundException($"No Account with ID {id} found");
 
             return result;
+        }
+
+        public IEnumerable<Account> FindWith(ISpecification<Account> specification)
+        {
+            _logger.LogInformation($"Searching for Accounts following a {specification.GetType().FullName}");
+            return _context.Accounts
+                .Where(specification.ToExpression())
+                .ToArray();
         }
     }
 }
