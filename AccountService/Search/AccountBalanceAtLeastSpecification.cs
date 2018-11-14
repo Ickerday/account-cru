@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace AccountService.Search
 {
-    public abstract class AccountBalanceAtLeastSpecification : Specification<Account>
+    public class AccountBalanceAtLeastSpecification : Specification<Account>
     {
         public decimal Balance { get; }
 

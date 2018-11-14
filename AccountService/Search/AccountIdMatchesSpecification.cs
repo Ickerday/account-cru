@@ -9,10 +9,8 @@ namespace AccountService.Search
     {
         public ulong Id { get; }
 
-        public AccountIdMatchesSpecification(ulong id)
-        {
+        public AccountIdMatchesSpecification(ulong id) =>
             Id = id;
-        }
 
         public override Expression<Func<Account, bool>> ToExpression() =>
             x => x.Id == Id;
