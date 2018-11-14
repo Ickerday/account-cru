@@ -21,16 +21,23 @@ namespace AccountService.Application.Commands
 
         public void Update(ulong id, Account account)
         {
-            _logger.LogInformation($"Updating account with ID {account.Id}");
+            _logger.LogInformation($"Updating account with ID {id}");
             var result = _context.Accounts
-                .ReplaceOne(x => x.Id == account.Id, account)
-                .ModifiedCount;
+                .ReplaceOne(x => x.Id == account.Id, account);
 
-            if (result == 1L)
+            if (result.MatchedCount != 1L)
+            {
+                var notMatchedMessage = $"No account with ID {id} found";
+                _logger.LogWarning(notMatchedMessage);
+                throw new AccountNotFoundException(notMatchedMessage);
+            }
+
+            if (result.ModifiedCount == 1L)
                 return;
 
-            _logger.LogWarning($"No account with ID {account.Id} found or data was invalid");
-            throw new AccountException("Couldn't update Account");
+            var notModifiedMessage = $"Account with ID {id} not updated";
+            _logger.LogWarning(notModifiedMessage);
+            throw new AccountException(notModifiedMessage);
         }
 
         public void Add(Account account)
@@ -43,7 +50,7 @@ namespace AccountService.Application.Commands
             }
             catch (MongoWriteException ex)
             {
-                _logger.LogWarning($"Couldn't insert new Account with ID {account.Id}");
+                _logger.LogError($"Couldn't insert new Account with ID {account.Id}");
                 throw new AccountException("Couldn't update Account", ex);
             }
         }
