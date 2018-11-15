@@ -1,4 +1,4 @@
-using AccountService.Persistence.MongoDb;
+using AccountService.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -21,11 +21,7 @@ namespace AccountService
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            var mongoConfig = Configuration.GetSection("MongoDb");
-            services.AddMongoDb(mongoConfig["ConnectionString"], mongoConfig["Database"]);
-
-            //            services.AddEfCore(Configuration.GetConnectionString("EfCore"));
-
+            DatabaseInitializer.Initalize(Configuration, services);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
