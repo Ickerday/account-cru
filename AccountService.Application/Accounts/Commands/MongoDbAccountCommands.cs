@@ -1,6 +1,10 @@
 ﻿using AccountService.Application.Exceptions.Account;
+using AccountService.Domain.Entities;
+using AccountService.Persistence;
+using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 
-namespace AccountService.Application.Account.Commands
+namespace AccountService.Application.Accounts.Commands
 {
     public sealed class MongoDbAccountCommands : ICommands<Account>
     {

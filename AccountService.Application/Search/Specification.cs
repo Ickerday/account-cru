@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace AccountService.Core.Search
+namespace AccountService.Application.Search
 {
     public abstract class Specification<T>
     {

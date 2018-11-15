@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace AccountService.Core.Search
+namespace AccountService.Application.Search
 {
     public class NotSpecification<T> : Specification<T>
     {

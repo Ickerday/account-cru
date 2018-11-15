@@ -1,6 +1,9 @@
 using AccountService.Application.Exceptions.Account;
+using AccountService.Domain.Entities;
+using AccountService.Persistence.EfCore;
+using Microsoft.Extensions.Logging;
 
-namespace AccountService.Application.Account.Commands
+namespace AccountService.Application.Accounts.Commands
 {
     public class EfCoreAccountCommands : ICommands<Account>
     {

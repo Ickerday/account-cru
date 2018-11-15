@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using static System.Linq.Expressions.Expression;
 
-namespace AccountService.Core.Search
+namespace AccountService.Application.Search
 {
     public class AndSpecification<T> : Specification<T>
     {
@@ -23,8 +22,9 @@ namespace AccountService.Core.Search
 
             // This is the weirdest thing ever
             // https://stackoverflow.com/a/15592610
-            var andExpression = AndAlso(leftExpression.Body, Invoke(rightExpression, leftExpression.Parameters.SingleOrDefault()));
-            return Lambda<Func<T, bool>>(andExpression, leftExpression.Parameters.SingleOrDefault());
+            var andExpression = Expression.AndAlso(leftExpression.Body,
+                Expression.Invoke(rightExpression, leftExpression.Parameters.SingleOrDefault()));
+            return Expression.Lambda<Func<T, bool>>(andExpression, leftExpression.Parameters.SingleOrDefault());
         }
     }
 }

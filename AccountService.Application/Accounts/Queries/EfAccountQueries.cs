@@ -1,6 +1,12 @@
 using AccountService.Application.Exceptions.Account;
+using AccountService.Application.Search;
+using AccountService.Domain.Entities;
+using AccountService.Persistence.EfCore;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace AccountService.Application.Account.Queries
+namespace AccountService.Application.Accounts.Queries
 {
     public class EfAccountQueries : IQueries<Account>
     {

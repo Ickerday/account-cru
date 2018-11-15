@@ -1,4 +1,6 @@
-﻿namespace AccountService.Application.Exceptions.Account
+﻿using System;
+
+namespace AccountService.Application.Exceptions.Account
 {
     public class AccountNotFoundException : AccountException
     {

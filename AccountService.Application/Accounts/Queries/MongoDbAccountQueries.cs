@@ -1,6 +1,16 @@
 using AccountService.Application.Exceptions.Account;
+using AccountService.Application.Search;
+using AccountService.Domain.Entities;
+using AccountService.Persistence;
+using AccountService.Search;
+using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
-namespace AccountService.Application.Account.Queries
+namespace AccountService.Application.Accounts.Queries
 {
     public class MongoDbAccountQueries : IQueries<Account>
     {

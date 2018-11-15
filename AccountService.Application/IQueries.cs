@@ -1,12 +1,12 @@
-﻿using AccountService.Core.Search;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using AccountService.Application.Search;
 
-namespace AccountService.Core.Queries
+namespace AccountService.Application
 {
-    public interface IQueries<out TEntity>
+    public interface IQueries<TEntity>
     {
         IEnumerable<TEntity> GetAll();
         TEntity GetBy(ulong id);
-        IEnumerable<TEntity> FindWith(Specification<Account> specification);
+        IEnumerable<TEntity> FindWith(Specification<TEntity> specification);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace AccountService.Application.Exceptions.Specification
+﻿using System;
+
+namespace AccountService.Application.Exceptions.Specification
 {
     public class SpecificationException : Exception
     {
