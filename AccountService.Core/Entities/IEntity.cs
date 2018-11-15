@@ -6,7 +6,5 @@ namespace AccountService.Core.Entities
     {
         [BsonId]
         TKey Id { get; set; }
-        decimal AvailableFunds { get; set; }
-        decimal Balance { get; set; }
     }
 }
