@@ -1,12 +1,13 @@
-﻿using AccountService.Core.Entities;
-using AccountService.Core.Exceptions;
+﻿using AccountService.Core.Commands;
+using AccountService.Core.Entities;
+using AccountService.Core.Exceptions.Account;
 using AccountService.Core.Persistence;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
 namespace AccountService.Application.Commands
 {
-    public sealed class MongoDbAccountCommands : IAccountCommands
+    public sealed class MongoDbAccountCommands : ICommands<Account>
     {
         private readonly IDbInfrastructure<IMongoCollection<Account>> _context;
         private readonly ILogger<MongoDbAccountCommands> _logger;

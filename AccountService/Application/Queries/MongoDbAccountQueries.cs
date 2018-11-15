@@ -1,6 +1,9 @@
 using AccountService.Core.Entities;
-using AccountService.Core.Exceptions;
+using AccountService.Core.Exceptions.Account;
 using AccountService.Core.Persistence;
+using AccountService.Core.Queries;
+using AccountService.Core.Search;
+using AccountService.Search;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System;
@@ -10,7 +13,7 @@ using System.Linq.Expressions;
 
 namespace AccountService.Application.Queries
 {
-    public class MongoDbAccountQueries : IAccountQueries
+    public class MongoDbAccountQueries : IQueries<Account>
     {
         private readonly IDbInfrastructure<IMongoCollection<Account>> _context;
         private readonly ILogger<MongoDbAccountQueries> _logger;
@@ -25,14 +28,14 @@ namespace AccountService.Application.Queries
         public IEnumerable<Account> GetAll()
         {
             _logger.LogInformation("Getting all Accounts");
-            return Get(_ => true)
-                .ToArray();
+            return FindWith(_ => true);
         }
 
         public Account GetBy(ulong id)
         {
             _logger.LogInformation($"Searching for Account with ID {id}");
-            var result = Get(x => x.Id == id)
+            var spec = new AccountIdMatchesSpecification(id);
+            var result = FindWith(spec)
                 .FirstOrDefault();
 
             if (result == null)
@@ -41,11 +44,18 @@ namespace AccountService.Application.Queries
             return result;
         }
 
-        private IEnumerable<Account> Get(Expression<Func<Account, bool>> filter)
+        public IEnumerable<Account> FindWith(Specification<Account> specification)
         {
-            var documents = _context.Accounts;
+            _logger.LogInformation($"Searching for Accounts following a {specification.GetType().FullName}");
+            return GetAll().Where(specification.ToExpression()
+                .Compile());
+        }
+
+        private IEnumerable<Account> FindWith(Expression<Func<Account, bool>> filter)
+        {
+            _logger.LogInformation($"Searching for Accounts with a {filter.GetType().FullName}");
             var result = new List<Account>();
-            using (var cursor = documents.FindSync(filter))
+            using (var cursor = _context.Accounts.FindSync(filter))
                 while (cursor.MoveNext())
                     result.AddRange(cursor.Current);
 

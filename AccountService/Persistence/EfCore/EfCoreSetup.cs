@@ -1,6 +1,9 @@
 ﻿using System;
 using AccountService.Application.Commands;
 using AccountService.Application.Queries;
+using AccountService.Core.Commands;
+using AccountService.Core.Entities;
+using AccountService.Core.Queries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,8 +25,8 @@ namespace AccountService.Persistence.EfCore
 
         private static void AddCqrs(IServiceCollection services)
         {
-            services.AddScoped<IAccountCommands, EfCoreAccountCommands>();
-            services.AddScoped<IAccountQueries, EfAccountQueries>();
+            services.AddScoped<ICommands<Account>, EfCoreAccountCommands>();
+            services.AddScoped<IQueries<Account>, EfAccountQueries>();
         }
     }
 }

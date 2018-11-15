@@ -1,11 +1,12 @@
+using AccountService.Core.Commands;
 using AccountService.Core.Entities;
-using AccountService.Core.Exceptions;
+using AccountService.Core.Exceptions.Account;
 using AccountService.Persistence.EfCore;
 using Microsoft.Extensions.Logging;
 
 namespace AccountService.Application.Commands
 {
-    public class EfCoreAccountCommands : IAccountCommands
+    public class EfCoreAccountCommands : ICommands<Account>
     {
         private readonly AccountingContext _context;
         private readonly ILogger<EfCoreAccountCommands> _logger;
