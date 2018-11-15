@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace AccountService.Core.Search
@@ -16,7 +17,13 @@ namespace AccountService.Core.Search
 
         public override Expression<Func<T, bool>> ToExpression()
         {
-            throw new NotImplementedException();
+            var leftExpression = _left.ToExpression();
+            var rightExpression = _right.ToExpression();
+
+            var orExpression = Expression.OrElse(leftExpression.Body,
+                Expression.Invoke(rightExpression, leftExpression.Parameters.SingleOrDefault()));
+            return Expression.Lambda<Func<T, bool>>
+                (orExpression, leftExpression.Parameters.SingleOrDefault());
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
+using static System.Linq.Expressions.Expression;
 
 namespace AccountService.Core.Search
 {
@@ -19,8 +21,10 @@ namespace AccountService.Core.Search
             var leftExpression = _left.ToExpression();
             var rightExpression = _right.ToExpression();
 
-            var andExpression = Expression.AndAlso(leftExpression.Body, rightExpression.Body);
-            return Expression.Lambda<Func<T, bool>>(andExpression, leftExpression.Parameters);
+            // This is the weirdest thing ever
+            // https://stackoverflow.com/a/15592610
+            var andExpression = AndAlso(leftExpression.Body, Invoke(rightExpression, leftExpression.Parameters.SingleOrDefault()));
+            return Lambda<Func<T, bool>>(andExpression, leftExpression.Parameters.SingleOrDefault());
         }
     }
 }
