@@ -47,12 +47,8 @@ namespace AccountService.Application.Queries
         public IEnumerable<Account> FindWith(Specification<Account> specification)
         {
             _logger.LogInformation($"Searching for Accounts following a {specification.GetType().FullName}");
-            var result = new List<Account>();
-            using (var cursor = _context.Accounts.FindSync(specification.ToExpression()))
-                while (cursor.MoveNext())
-                    result.AddRange(cursor.Current);
-
-            return result;
+            return GetAll().Where(specification.ToExpression()
+                .Compile());
         }
 
         private IEnumerable<Account> FindWith(Expression<Func<Account, bool>> filter)
