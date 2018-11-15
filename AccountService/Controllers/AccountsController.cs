@@ -103,8 +103,6 @@ namespace AccountService.Controllers
         {
             var spec = new AccountBalanceAtLeastSpecification(decimal.MinValue);
             var spec2 = new AccountIdMatchesSpecification(0UL);
-            spec.IsSatisfiedBy(new Account());
-
             return _queries.FindWith(spec.And(spec2))
                 .ToArray();
         }

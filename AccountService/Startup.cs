@@ -24,7 +24,7 @@ namespace AccountService
             var mongoConfig = Configuration.GetSection("MongoDb");
             services.AddMongoDb(mongoConfig["ConnectionString"], mongoConfig["Database"]);
 
-            // services.AddEfCore(Configuration.GetConnectionString("EfCore"));
+            //            services.AddEfCore(Configuration.GetConnectionString("EfCore"));
 
         }
 

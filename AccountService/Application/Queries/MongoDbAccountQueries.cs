@@ -28,8 +28,7 @@ namespace AccountService.Application.Queries
         public IEnumerable<Account> GetAll()
         {
             _logger.LogInformation("Getting all Accounts");
-            return FindWith(_ => true)
-                .ToArray();
+            return FindWith(_ => true);
         }
 
         public Account GetBy(ulong id)
