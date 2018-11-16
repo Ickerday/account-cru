@@ -1,8 +1,8 @@
-using AccountService.Application.Exceptions.Account;
-using AccountService.Application.Search;
+using AccountService.Application.Interfaces;
 using AccountService.Domain.Entities;
+using AccountService.Domain.Exceptions.Account;
+using AccountService.Domain.Search;
 using AccountService.Persistence;
-using AccountService.Search;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System;
@@ -34,7 +34,7 @@ namespace AccountService.Application.Accounts.Queries
         {
             _logger.LogInformation($"Searching for Account with ID {id}");
             var spec = new AccountIdMatchesSpecification(id);
-            var result = FindWith(spec)
+            var result = FindWith(spec.ToExpression())
                 .FirstOrDefault();
 
             if (result == null)

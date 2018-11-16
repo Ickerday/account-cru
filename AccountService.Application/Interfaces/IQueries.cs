@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using AccountService.Application.Search;
+﻿using AccountService.Domain.Search;
+using System.Collections.Generic;
 
-namespace AccountService.Application
+namespace AccountService.Application.Interfaces
 {
     public interface IQueries<TEntity>
     {

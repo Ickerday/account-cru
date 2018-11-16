@@ -1,10 +1,11 @@
-using AccountService.Application.Exceptions.Account;
-using AccountService.Application.Search;
 using AccountService.Domain.Entities;
 using AccountService.Persistence.EfCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
+using AccountService.Application.Interfaces;
+using AccountService.Domain.Exceptions.Account;
+using AccountService.Domain.Search;
 
 namespace AccountService.Application.Accounts.Queries
 {

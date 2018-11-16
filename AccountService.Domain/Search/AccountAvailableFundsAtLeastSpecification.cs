@@ -1,9 +1,8 @@
-﻿using AccountService.Core.Entities;
-using AccountService.Core.Search;
-using System;
+﻿using System;
 using System.Linq.Expressions;
+using AccountService.Domain.Entities;
 
-namespace AccountService.Search
+namespace AccountService.Domain.Search
 {
     public class AccountAvailableFundsAtLeastSpecification : Specification<Account>
     {

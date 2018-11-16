@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace AccountService.Application.Search
+namespace AccountService.Domain.Search
 {
     public class OrSpecification<T> : Specification<T>
     {

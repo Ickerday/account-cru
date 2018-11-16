@@ -1,13 +1,14 @@
-﻿using System;
-using AccountService.Core.Entities;
-using AccountService.Core.Persistence;
+﻿using AccountService.Domain.Entities;
 using MongoDB.Driver;
+using System;
 
 namespace AccountService.Persistence.MongoDb
 {
     public sealed class MongoDbContext : IDbInfrastructure<IMongoCollection<Account>>
     {
         private readonly IMongoDatabase _db;
+
+        public IMongoCollection<Account> Accounts => _db.GetCollection<Account>("Accounts");
 
         public MongoDbContext(string connectionString, string dbName)
         {
@@ -18,7 +19,5 @@ namespace AccountService.Persistence.MongoDb
 
             _db = client.GetDatabase(dbName);
         }
-
-        public IMongoCollection<Account> Accounts => _db.GetCollection<Account>("Accounts");
     }
 }

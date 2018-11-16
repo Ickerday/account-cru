@@ -1,7 +1,6 @@
-﻿using AccountService.Core.Commands;
-using AccountService.Core.Entities;
-using AccountService.Core.Queries;
-using AccountService.Search;
+﻿using AccountService.Application.Interfaces;
+using AccountService.Domain.Entities;
+using AccountService.Domain.Search;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;

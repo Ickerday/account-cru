@@ -1,4 +1,4 @@
-﻿namespace AccountService.Application
+﻿namespace AccountService.Application.Interfaces
 {
     public interface ICommands<in TEntity>
     {

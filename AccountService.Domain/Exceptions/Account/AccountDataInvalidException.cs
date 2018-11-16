@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AccountService.Application.Exceptions.Account
+namespace AccountService.Domain.Exceptions.Account
 {
     public class AccountDataInvalidException : AccountException
     {

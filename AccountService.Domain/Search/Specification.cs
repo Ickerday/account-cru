@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace AccountService.Application.Search
+namespace AccountService.Domain.Search
 {
     public abstract class Specification<T>
     {
@@ -20,9 +20,9 @@ namespace AccountService.Application.Search
             new AndSpecification<T>(this, specification);
 
         public Specification<T> Or(Specification<T> specification) =>
-            throw new NotImplementedException();
+            new OrSpecification<T>(this, specification);
 
         public Specification<T> Not(Specification<T> specification) =>
-            throw new NotImplementedException();
+            new NotSpecification<T>(specification);
     }
 }

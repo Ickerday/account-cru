@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AccountService.Application.Exceptions.Specification
+namespace AccountService.Domain.Exceptions.Specification
 {
     public class SpecificationException : Exception
     {

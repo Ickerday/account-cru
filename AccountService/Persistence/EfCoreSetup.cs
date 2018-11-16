@@ -1,13 +1,13 @@
-﻿using System;
-using AccountService.Application.Commands;
-using AccountService.Application.Queries;
-using AccountService.Core.Commands;
-using AccountService.Core.Entities;
-using AccountService.Core.Queries;
+﻿using AccountService.Application.Accounts.Commands;
+using AccountService.Application.Accounts.Queries;
+using AccountService.Application.Interfaces;
+using AccountService.Domain.Entities;
+using AccountService.Persistence.EfCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
-namespace AccountService.Persistence.EfCore
+namespace AccountService.Persistence
 {
     public static class EfCoreSetup
     {

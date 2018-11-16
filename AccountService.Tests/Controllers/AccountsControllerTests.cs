@@ -1,7 +1,6 @@
-﻿using AccountService.Controllers;
-using AccountService.Core.Commands;
-using AccountService.Core.Entities;
-using AccountService.Core.Queries;
+﻿using AccountService.Application.Interfaces;
+using AccountService.Controllers;
+using AccountService.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;

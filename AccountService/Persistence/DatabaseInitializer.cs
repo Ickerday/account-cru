@@ -1,6 +1,4 @@
-﻿using AccountService.Persistence.EfCore;
-using AccountService.Persistence.Exceptions;
-using AccountService.Persistence.MongoDb;
+﻿using AccountService.Persistence.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
