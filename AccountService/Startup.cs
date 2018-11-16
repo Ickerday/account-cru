@@ -1,6 +1,7 @@
-using AccountService.Persistence.MongoDb;
+using AccountService.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,15 +22,15 @@ namespace AccountService
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            var mongoConfig = Configuration.GetSection("MongoDb");
-            services.AddMongoDb(mongoConfig["ConnectionString"], mongoConfig["Database"]);
-
-            //            services.AddEfCore(Configuration.GetConnectionString("EfCore"));
-
+            DatabaseInitializer.Initalize(Configuration, services);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseForwardedHeaders(new ForwardedHeadersOptions()
+            { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
+
+            
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
             else

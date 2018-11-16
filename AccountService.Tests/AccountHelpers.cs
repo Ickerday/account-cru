@@ -1,4 +1,4 @@
-﻿using AccountService.Core.Entities;
+﻿using AccountService.Domain.Entities;
 using Moq;
 using Xunit;
 
