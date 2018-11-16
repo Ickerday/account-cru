@@ -20,6 +20,8 @@ namespace AccountService.Domain.Search
             var leftExpression = _left.ToExpression();
             var rightExpression = _right.ToExpression();
 
+            return leftExpression && rightExpression;
+
             var orExpression = Expression.OrElse(leftExpression.Body,
                 Expression.Invoke(rightExpression, leftExpression.Parameters.SingleOrDefault()));
             return Expression.Lambda<Func<T, bool>>

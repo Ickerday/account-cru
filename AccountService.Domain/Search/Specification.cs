@@ -5,6 +5,8 @@ namespace AccountService.Domain.Search
 {
     public abstract class Specification<T>
     {
+        public abstract Expression<Func<T, bool>> ToExpression();
+
         public bool IsSatisfiedBy(T entity)
         {
             if (entity == null)
@@ -13,8 +15,6 @@ namespace AccountService.Domain.Search
             return ToExpression().Compile()
                 .Invoke(entity);
         }
-
-        public abstract Expression<Func<T, bool>> ToExpression();
 
         public Specification<T> And(Specification<T> specification) =>
             new AndSpecification<T>(this, specification);

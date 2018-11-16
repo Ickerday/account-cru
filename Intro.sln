@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountService.Api", "AccountService\AccountService.Api.csproj", "{34E10634-1128-4323-B6DD-5A6657C86DA6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountService.Tests", "AccountService.Tests\AccountService.Tests.csproj", "{B6C252EE-0BE0-4A1C-AF6D-A29A7A71AA90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountService.Api.Tests", "AccountService.Tests\AccountService.Api.Tests.csproj", "{B6C252EE-0BE0-4A1C-AF6D-A29A7A71AA90}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountService.Persistence", "AccountService.Persistence\AccountService.Persistence.csproj", "{31EE841C-2193-4769-82E3-A5EC0DD3677E}"
 EndProject

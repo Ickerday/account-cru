@@ -1,6 +1,5 @@
 ﻿using AccountService.Application.Interfaces;
 using AccountService.Domain.Entities;
-using AccountService.Domain.Search;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -100,10 +99,7 @@ namespace AccountService.Controllers
         [HttpGet("spec")]
         public ActionResult<IEnumerable<Account>> SpecificationTest()
         {
-            var spec = new AccountBalanceAtLeastSpecification(decimal.MinValue);
-            var spec2 = new AccountIdMatchesSpecification(0UL);
-            return _queries.FindWith(spec.And(spec2))
-                .ToArray();
+            return Ok();
         }
     }
 }
