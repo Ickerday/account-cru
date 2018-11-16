@@ -18,7 +18,6 @@
     },
     "Intro": {
       "commandName": "Project",
-      "launchBrowser": true,
       "launchUrl": "api/accounts",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
