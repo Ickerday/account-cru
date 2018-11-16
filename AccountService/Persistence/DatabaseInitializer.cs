@@ -4,24 +4,23 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AccountService.Persistence
 {
-    internal enum DatabaseEngineEnum
+    internal class DatabaseEngine
     {
-        EfCore,
-        MongoDb
+        internal const string EfCore = "efcore";
+        internal const string MongoDb = "mongodb";
     }
 
     public static class DatabaseInitializer
     {
         public static void Initalize(IConfiguration configuration, IServiceCollection services)
         {
-            var databaseEngine = configuration["databaseEngine"];
-            switch (databaseEngine)
+            switch (configuration["databaseEngine"])
             {
-                case (nameof(DatabaseEngineEnum.EfCore)):
+                case (DatabaseEngine.EfCore):
                     var mongoConfig = configuration.GetSection("MongoDb");
                     services.AddMongoDb(mongoConfig["ConnectionString"], mongoConfig["Database"]);
                     break;
-                case (nameof(DatabaseEngineEnum.MongoDb)):
+                case (DatabaseEngine.MongoDb):
                     services.AddEfCore(configuration.GetConnectionString("EfCore"));
                     break;
                 default:
