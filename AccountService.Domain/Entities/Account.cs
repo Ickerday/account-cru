@@ -5,10 +5,10 @@ namespace AccountService.Domain.Entities
     public class Account : IEntity<ulong>
     {
         [BsonId]
-        public ulong Id { get; set; }
-        public string Name { get; set; }
-        public decimal AvailableFunds { get; set; }
-        public decimal Balance { get; set; }
+        public ulong Id { get; set; } = 0UL;
+        public string Name { get; set; } = string.Empty;
+        public decimal AvailableFunds { get; set; } = decimal.Zero;
+        public decimal Balance { get; set; } = decimal.Zero;
         public bool HasCard { get; set; }
     }
 
