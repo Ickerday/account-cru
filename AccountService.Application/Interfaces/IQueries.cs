@@ -1,4 +1,4 @@
-﻿using AccountService.Domain.Search;
+﻿using AccountService.Application.Search;
 using System.Collections.Generic;
 
 namespace AccountService.Application.Interfaces
@@ -7,6 +7,6 @@ namespace AccountService.Application.Interfaces
     {
         IEnumerable<TEntity> GetAll();
         TEntity GetBy(ulong id);
-        IEnumerable<TEntity> FindWith(Specification<TEntity> specification);
+        IEnumerable<TEntity> FindWith(ISpecificationBuilder<TEntity> builder);
     }
 }

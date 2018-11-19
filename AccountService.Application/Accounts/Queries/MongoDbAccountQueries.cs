@@ -1,7 +1,7 @@
 using AccountService.Application.Interfaces;
+using AccountService.Application.Search;
 using AccountService.Domain.Entities;
 using AccountService.Domain.Exceptions.Account;
-using AccountService.Domain.Search;
 using AccountService.Persistence;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
@@ -33,8 +33,7 @@ namespace AccountService.Application.Accounts.Queries
         public Account GetBy(ulong id)
         {
             _logger.LogInformation($"Searching for Account with ID {id}");
-            var spec = new AccountIdMatchesSpecification(id);
-            var result = FindWith(spec.ToExpression())
+            var result = FindWith(x => x.Id == id)
                 .FirstOrDefault();
 
             if (result == null)
@@ -43,11 +42,12 @@ namespace AccountService.Application.Accounts.Queries
             return result;
         }
 
-        public IEnumerable<Account> FindWith(Specification<Account> specification)
+        public IEnumerable<Account> FindWith(ISpecificationBuilder<Account> builder)
         {
-            _logger.LogInformation($"Searching for Accounts following a {specification.GetType().FullName}");
-            return GetAll().Where(specification.ToExpression()
-                .Compile());
+            _logger.LogInformation($"Searching for Accounts following a {builder.GetType().FullName}");
+            return GetAll().Where(builder.Build()
+                .Compile())
+                .ToArray();
         }
 
         private IEnumerable<Account> FindWith(Expression<Func<Account, bool>> filter)

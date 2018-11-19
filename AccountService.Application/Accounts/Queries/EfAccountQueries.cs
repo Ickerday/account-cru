@@ -1,11 +1,11 @@
+using AccountService.Application.Interfaces;
+using AccountService.Application.Search;
 using AccountService.Domain.Entities;
+using AccountService.Domain.Exceptions.Account;
 using AccountService.Persistence.EfCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
-using AccountService.Application.Interfaces;
-using AccountService.Domain.Exceptions.Account;
-using AccountService.Domain.Search;
 
 namespace AccountService.Application.Accounts.Queries
 {
@@ -39,12 +39,11 @@ namespace AccountService.Application.Accounts.Queries
             return result;
         }
 
-        public IEnumerable<Account> FindWith(Specification<Account> specification)
+        public IEnumerable<Account> FindWith(ISpecificationBuilder<Account> builder)
         {
-            _logger.LogInformation($"Searching for Accounts following a {specification.GetType().FullName}");
+            _logger.LogInformation($"Searching for Accounts following a {builder.GetType().FullName}");
             return _context.Accounts
-                .Where(specification.ToExpression())
-                .ToArray();
+                .Where(builder.Build());
         }
     }
 }

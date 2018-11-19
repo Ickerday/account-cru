@@ -1,4 +1,5 @@
 ﻿using AccountService.Application.Interfaces;
+using AccountService.Application.Search;
 using AccountService.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -46,7 +47,11 @@ namespace AccountService.Controllers
         {
             try
             {
-                var result = _queries.GetBy(id);
+                var idSpec = new AccountSpecificationBuilder()
+                    .WithId(id);
+
+                var result = _queries.FindWith(idSpec)
+                    .FirstOrDefault();
 
                 if (result != null)
                 {
@@ -97,9 +102,30 @@ namespace AccountService.Controllers
         }
 
         [HttpGet("spec")]
-        public ActionResult<IEnumerable<Account>> SpecificationTest()
+        public ActionResult<IEnumerable<Account>> SpecificationTest(ulong? id, string name, decimal? availableFunds, decimal? balance, bool? hasCard)
         {
-            return Ok();
+            var spec = new AccountSpecificationBuilder()
+                .WithId(id)
+                .WithName(name)
+                .WithAvailableFunds(availableFunds)
+                .WithBalance(balance)
+                .WithCard(hasCard);
+
+
+            if (id.HasValue)
+                spec = spec.WithId(id);
+            if (!string.IsNullOrWhiteSpace(name))
+                spec = spec.WithName(name);
+            if (availableFunds.HasValue)
+                spec = spec.WithAvailableFunds(availableFunds);
+            if (balance.HasValue)
+                spec = spec.WithBalance(balance);
+            if (hasCard.HasValue)
+                spec = spec.WithCard(hasCard);
+
+            var result = _queries.FindWith(spec);
+
+            return Ok(result);
         }
     }
 }
