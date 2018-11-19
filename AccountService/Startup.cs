@@ -1,6 +1,7 @@
 using AccountService.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,12 +23,14 @@ namespace AccountService
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             DatabaseInitializer.Initalize(Configuration, services);
+
+            services.AddSwaggerDocument();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //            app.UseForwardedHeaders(new ForwardedHeadersOptions()
-            //            { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
 
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
@@ -37,6 +40,16 @@ namespace AccountService
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            app.UseSwagger(configure =>
+            {
+                configure.PostProcess = (doc, req) =>
+                {
+                    doc.Info.Title = "AccountCRUD";
+                    doc.Info.Description = ".NET Core CRUD";
+                };
+            });
+            app.UseSwaggerUi3();
         }
     }
 }
