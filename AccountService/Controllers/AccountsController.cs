@@ -2,6 +2,7 @@
 using AccountService.Application.Search;
 using AccountService.Domain.Entities;
 using AccountService.Domain.Exceptions.Specification;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -39,7 +40,7 @@ namespace AccountService.Controllers
             catch (Exception ex)
             {
                 _logger.LogError("Couldn't get all Accounts", ex);
-                return StatusCode(503);
+                return StatusCode(StatusCodes.Status503ServiceUnavailable);
             }
         }
 
@@ -103,7 +104,9 @@ namespace AccountService.Controllers
         }
 
         [HttpGet("spec")]
-        public ActionResult<IEnumerable<Account>> GetBySpecification(ulong? id, string name, decimal? availableFunds, decimal? balance, bool? hasCard)
+        public ActionResult<IEnumerable<Account>> GetBySpecification([FromQuery] ulong? id,
+            [FromQuery] string name, [FromQuery] decimal? availableFunds,
+            [FromQuery] decimal? balance, [FromQuery] bool? hasCard)
         {
             try
             {
@@ -120,14 +123,14 @@ namespace AccountService.Controllers
             catch (Exception ex)
             {
                 _logger.LogError("Error encountered", ex);
-                return StatusCode(418);
+                return StatusCode(StatusCodes.Status503ServiceUnavailable);
             }
         }
 
-        private static AccountSpecificationBuilder PrepareSpecification(ulong? id,
+        private static ISpecificationBuilder<Account> PrepareSpecification(ulong? id,
             string name, decimal? availableFunds, decimal? balance, bool? hasCard)
         {
-            var spec = new AccountSpecificationBuilder();
+            var spec = new AccountSpecificationBuilder(false);
 
             if (id.HasValue)
                 spec = spec.WithId(id);
