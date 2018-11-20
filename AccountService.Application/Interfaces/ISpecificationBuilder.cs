@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace AccountService.Application.Search
+namespace AccountService.Application.Interfaces
 {
     public interface ISpecificationBuilder<T>
     {
