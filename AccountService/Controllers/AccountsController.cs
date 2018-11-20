@@ -1,6 +1,7 @@
 ﻿using AccountService.Application.Interfaces;
 using AccountService.Application.Search;
 using AccountService.Domain.Entities;
+using AccountService.Domain.Exceptions.Specification;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -53,14 +54,14 @@ namespace AccountService.Controllers
                 var result = _queries.FindWith(idSpec)
                     .FirstOrDefault();
 
-                if (result != null)
+                if (result == null)
                 {
-                    _logger.LogInformation($"Found Account with ID {id}");
-                    return result;
+                    _logger.LogWarning($"Couldn't find Account with ID {id}");
+                    return NotFound();
                 }
 
-                _logger.LogWarning($"Couldn't find Account with ID {id}");
-                return NotFound();
+                _logger.LogInformation($"Found Account with ID {id}");
+                return result;
             }
             catch (Exception ex)
             {
@@ -102,15 +103,31 @@ namespace AccountService.Controllers
         }
 
         [HttpGet("spec")]
-        public ActionResult<IEnumerable<Account>> SpecificationTest(ulong? id, string name, decimal? availableFunds, decimal? balance, bool? hasCard)
+        public ActionResult<IEnumerable<Account>> GetBySpecification(ulong? id, string name, decimal? availableFunds, decimal? balance, bool? hasCard)
         {
-            var spec = new AccountSpecificationBuilder()
-                .WithId(id)
-                .WithName(name)
-                .WithAvailableFunds(availableFunds)
-                .WithBalance(balance)
-                .WithCard(hasCard);
+            try
+            {
+                var spec = PrepareSpecification(id, name, availableFunds, balance, hasCard);
 
+                return _queries.FindWith(spec)
+                    .ToArray();
+            }
+            catch (InvalidSpecificationException specEx)
+            {
+                _logger.LogError("Wrong specification provided", specEx);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error encountered", ex);
+                return StatusCode(418);
+            }
+        }
+
+        private static AccountSpecificationBuilder PrepareSpecification(ulong? id,
+            string name, decimal? availableFunds, decimal? balance, bool? hasCard)
+        {
+            var spec = new AccountSpecificationBuilder();
 
             if (id.HasValue)
                 spec = spec.WithId(id);
@@ -122,10 +139,7 @@ namespace AccountService.Controllers
                 spec = spec.WithBalance(balance);
             if (hasCard.HasValue)
                 spec = spec.WithCard(hasCard);
-
-            var result = _queries.FindWith(spec);
-
-            return Ok(result);
+            return spec;
         }
     }
 }
