@@ -44,15 +44,17 @@ namespace AccountService.Application.Accounts.Queries
 
         public IEnumerable<Account> FindWith(ISpecificationBuilder<Account> builder)
         {
-            _logger.LogInformation($"Searching for Accounts following a {builder.GetType().FullName}");
-            return GetAll().Where(builder.Build()
-                .Compile())
-                .ToArray();
+            _logger.LogInformation($"Searching for Accounts with {builder.GetType().Name}");
+            var compiledSpec = builder.Build().Compile();
+
+            return _context.Accounts
+                .AsQueryable()
+                .Where(compiledSpec);
         }
 
         private IEnumerable<Account> FindWith(Expression<Func<Account, bool>> filter)
         {
-            _logger.LogInformation($"Searching for Accounts with a {filter.GetType().FullName}");
+            _logger.LogInformation($"Searching for Accounts with {filter.GetType().Name}");
             var result = new List<Account>();
             using (var cursor = _context.Accounts.FindSync(filter))
                 while (cursor.MoveNext())

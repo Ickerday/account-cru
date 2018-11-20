@@ -19,7 +19,7 @@ namespace AccountService.Application.Accounts.Commands
 
         public void Add(Account account)
         {
-            if (!AccountHelpers.IsValid(account))
+            if (!Account.IsValid(account))
                 throw new AccountDataInvalidException("Invalid new Account data");
 
             _context.Accounts
@@ -35,7 +35,7 @@ namespace AccountService.Application.Accounts.Commands
             if (oldAccount == null)
                 throw new AccountNotFoundException($"No Account with ID {id} found");
 
-            AccountHelpers.MapAccount(newAccount, oldAccount);
+            Account.MapAccount(newAccount, oldAccount);
 
             _logger.LogInformation($"Updating account with ID {id}");
             _context.Update(oldAccount);
