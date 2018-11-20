@@ -10,10 +10,7 @@ namespace AccountService.Domain.Entities
         public decimal AvailableFunds { get; set; } = decimal.Zero;
         public decimal Balance { get; set; } = decimal.Zero;
         public bool HasCard { get; set; }
-    }
 
-    public static class AccountHelpers
-    {
         public static bool IsValid(Account account) => account.Id > ulong.MinValue
                                                        && !string.IsNullOrWhiteSpace(account.Name)
                                                        && account.AvailableFunds <= account.Balance;
