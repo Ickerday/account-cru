@@ -1,4 +1,4 @@
-﻿using AccountService.Persistence.Exceptions;
+﻿using AccountService.Domain.Exceptions.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,11 +16,11 @@ namespace AccountService.Persistence
         {
             switch (configuration["databaseEngine"])
             {
-                case (DatabaseEngine.EfCore):
+                case (DatabaseEngine.MongoDb):
                     var mongoConfig = configuration.GetSection("MongoDb");
                     services.AddMongoDb(mongoConfig["ConnectionString"], mongoConfig["Database"]);
                     break;
-                case (DatabaseEngine.MongoDb):
+                case (DatabaseEngine.EfCore):
                     services.AddEfCore(configuration.GetConnectionString("EfCore"));
                     break;
                 default:

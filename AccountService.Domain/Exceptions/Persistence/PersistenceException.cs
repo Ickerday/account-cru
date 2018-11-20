@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AccountService.Persistence.Exceptions
+namespace AccountService.Domain.Exceptions.Persistence
 {
     public class PersistenceException : Exception
     {

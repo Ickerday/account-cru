@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AccountService.Persistence\AccountService.Persistence.csproj" />
+    <ProjectReference Include="..\AccountService.Persistence\AccountService.Persistence.EfCore.csproj" />
   </ItemGroup>
 
 </Project>

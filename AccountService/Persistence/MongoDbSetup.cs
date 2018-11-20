@@ -1,6 +1,7 @@
 ﻿using AccountService.Application.Accounts.Commands;
 using AccountService.Application.Accounts.Queries;
 using AccountService.Application.Interfaces;
+using AccountService.Domain;
 using AccountService.Domain.Entities;
 using AccountService.Persistence.MongoDb;
 using Microsoft.Extensions.DependencyInjection;

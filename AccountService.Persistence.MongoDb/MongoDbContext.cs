@@ -1,6 +1,7 @@
-﻿using AccountService.Domain.Entities;
+﻿using System;
+using AccountService.Domain;
+using AccountService.Domain.Entities;
 using MongoDB.Driver;
-using System;
 
 namespace AccountService.Persistence.MongoDb
 {
