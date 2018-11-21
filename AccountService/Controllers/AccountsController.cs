@@ -137,9 +137,9 @@ namespace AccountService.Controllers
             if (!string.IsNullOrWhiteSpace(name))
                 spec = spec.WithName(name);
             if (availableFunds.HasValue)
-                spec = spec.WithAvailableFunds(availableFunds);
+                spec = spec.WithAvailableFundsEqualTo(availableFunds);
             if (balance.HasValue)
-                spec = spec.WithBalance(balance);
+                spec = spec.WithBalanceEqualTo(balance);
             if (hasCard.HasValue)
                 spec = spec.WithCard(hasCard);
             return spec;
