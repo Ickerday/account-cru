@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AccountService.Tests.Common\AccountService.Tests.Common.csproj" />
     <ProjectReference Include="..\AccountService\AccountService.Api.csproj" />
   </ItemGroup>
 

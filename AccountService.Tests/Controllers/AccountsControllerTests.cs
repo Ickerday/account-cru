@@ -1,7 +1,7 @@
 ﻿using AccountService.Application.Interfaces;
-using AccountService.Application.Search;
 using AccountService.Controllers;
 using AccountService.Domain.Entities;
+using AccountService.Tests.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -64,13 +64,19 @@ namespace AccountService.Tests.Controllers
         public void Controller__GetsAllAccounts()
         {
             // Arrange
-            var accountList = new[] { AccountHelpers.GetMockAccount(0UL, "test1", 123M, 456M, false) };
+            var accounts = new[]
+            {
+                AccountHelpers.GetMockAccount(0UL, "test1", 123M, 456M, true),
+                AccountHelpers.GetMockAccount(1UL, "test1", 123M, 456M, true),
+                AccountHelpers.GetMockAccount(2UL, "test1", 123M, 456M, true)
+
+            };
 
             var mockLogger = new Mock<ILogger<AccountsController>>();
             var mockCommands = new Mock<ICommands<Account>>();
             var mockQueries = new Mock<IQueries<Account>>();
             mockQueries.Setup(x => x.GetAll())
-                .Returns(accountList);
+                .Returns(accounts);
 
             _controller = new AccountsController(mockCommands.Object, mockQueries.Object, mockLogger.Object);
 
@@ -78,21 +84,22 @@ namespace AccountService.Tests.Controllers
             var response = _controller.Get();
 
             // Assert
-            Assert.Equal(accountList, response.Value);
+            Assert.Equal(accounts, response.Value);
         }
 
         [Theory]
-        [InlineData(ulong.MinValue, "", 312098310983091, 10293821093810983, false)]
+        [InlineData(ulong.MinValue, "test1", 312098310983091, 10293821093810983, false)]
+        [InlineData(ulong.MaxValue, "test2", 3120980983091, 102938213810983, false)]
         public void Controller_ShouldGetBySpec(ulong? id, string name, decimal availableFunds, decimal balance, bool? hasCard)
         {
             // Arrange
-            var accountList = new[] { AccountHelpers.GetMockAccount(id, name, availableFunds, balance, hasCard) };
+            var accounts = new[] { AccountHelpers.GetMockAccount(id, name, availableFunds, balance, hasCard) };
 
             var mockLogger = new Mock<ILogger<AccountsController>>();
             var mockCommands = new Mock<ICommands<Account>>();
             var mockQueries = new Mock<IQueries<Account>>();
             mockQueries.Setup(x => x.FindWith(It.IsAny<ISpecificationBuilder<Account>>()))
-                .Returns(accountList);
+                .Returns(accounts);
 
             _controller = new AccountsController(mockCommands.Object, mockQueries.Object, mockLogger.Object);
 
@@ -101,7 +108,7 @@ namespace AccountService.Tests.Controllers
 
             // Assert
             mockQueries.Verify(x => x.FindWith(It.IsAny<ISpecificationBuilder<Account>>()));
-            Assert.Contains(accountList.Single(), result.Value);
+            Assert.Contains(accounts.Single(), result.Value);
         }
     }
 }

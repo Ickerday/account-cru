@@ -1,5 +1,4 @@
-﻿using AccountService.Application.Search;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace AccountService.Application.Interfaces
 {

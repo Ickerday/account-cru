@@ -1,5 +1,4 @@
 using AccountService.Application.Interfaces;
-using AccountService.Application.Search;
 using AccountService.Domain.Entities;
 using AccountService.Domain.Exceptions.Account;
 using AccountService.Persistence.EfCore;
