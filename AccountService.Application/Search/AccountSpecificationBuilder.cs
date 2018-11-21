@@ -1,4 +1,4 @@
-using AccountService.Application.Interfaces;
+﻿using AccountService.Application.Interfaces;
 using AccountService.Domain.Exceptions.Specification;
 using LinqKit;
 using System;
@@ -11,7 +11,7 @@ namespace AccountService.Application.Search
 {
     public class AccountSpecificationBuilder : ISpecificationBuilder<Account>
     {
-        private readonly Expression<Func<Account, bool>> _predBuilder;
+        private Expression<Func<Account, bool>> _predBuilder;
 
         private readonly IList<Expression<Func<Account, bool>>> _predicates;
 
@@ -21,7 +21,7 @@ namespace AccountService.Application.Search
                 throw new InvalidSpecificationException("No predicates provided!");
 
             foreach (var predicate in _predicates)
-                _predBuilder.Extend(predicate, PredicateOperator.And);
+                _predBuilder = _predBuilder.And(predicate);
 
             return _predBuilder;
         }
@@ -50,7 +50,7 @@ namespace AccountService.Application.Search
             return this;
         }
 
-        public AccountSpecificationBuilder WithAvailableFunds(decimal? availableFunds)
+        public AccountSpecificationBuilder WithAvailableFundsEqualTo(decimal? availableFunds)
         {
             if (!availableFunds.HasValue)
                 throw new InvalidSpecificationException("Wrong AvailableFunds specified");
@@ -59,12 +59,48 @@ namespace AccountService.Application.Search
             return this;
         }
 
-        public AccountSpecificationBuilder WithBalance(decimal? balance)
+        public AccountSpecificationBuilder WithAvailableFundsMoreOrEqualTo(decimal? availableFunds)
+        {
+            if (!availableFunds.HasValue)
+                throw new InvalidSpecificationException("Wrong AvailableFunds specified");
+
+            _predicates.Add(x => x.AvailableFunds >= availableFunds.Value);
+            return this;
+        }
+
+        public AccountSpecificationBuilder WithAvailableFundsLessOrEqualTo(decimal? availableFunds)
+        {
+            if (!availableFunds.HasValue)
+                throw new InvalidSpecificationException("Wrong AvailableFunds specified");
+
+            _predicates.Add(x => x.AvailableFunds <= availableFunds.Value);
+            return this;
+        }
+
+        public AccountSpecificationBuilder WithBalanceEqualTo(decimal? balance)
         {
             if (!balance.HasValue)
                 throw new InvalidSpecificationException("Wrong Balance specified");
 
             _predicates.Add(x => x.Balance == balance);
+            return this;
+        }
+
+        public AccountSpecificationBuilder WithBalanceMoreOrEqualTo(decimal? balance)
+        {
+            if (!balance.HasValue)
+                throw new InvalidSpecificationException("Wrong Balance specified");
+
+            _predicates.Add(x => x.Balance >= balance);
+            return this;
+        }
+
+        public AccountSpecificationBuilder WithBalanceLessOrEqualTo(decimal? balance)
+        {
+            if (!balance.HasValue)
+                throw new InvalidSpecificationException("Wrong Balance specified");
+
+            _predicates.Add(x => x.Balance <= balance);
             return this;
         }
 
@@ -74,6 +110,7 @@ namespace AccountService.Application.Search
                 throw new InvalidSpecificationException("Wrong HasCard specified");
 
             _predicates.Add(x => x.HasCard == hasCard.Value);
+            _predBuilder = _predBuilder.And((x => x.HasCard == hasCard));
             return this;
         }
     }
