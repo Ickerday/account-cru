@@ -1,10 +1,10 @@
-﻿using AccountService.Domain.Exceptions.Specification;
+using AccountService.Application.Interfaces;
+using AccountService.Domain.Exceptions.Specification;
 using LinqKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using AccountService.Application.Interfaces;
 using Account = AccountService.Domain.Entities.Account;
 
 namespace AccountService.Application.Search

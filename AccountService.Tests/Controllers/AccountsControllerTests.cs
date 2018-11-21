@@ -1,7 +1,7 @@
-﻿using AccountService.Application.Interfaces;
-using AccountService.Application.Search;
+using AccountService.Application.Interfaces;
 using AccountService.Controllers;
 using AccountService.Domain.Entities;
+using AccountService.Tests.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
