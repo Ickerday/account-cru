@@ -2,7 +2,9 @@
 using LinqKit;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using AccountService.Application.Interfaces;
 using Account = AccountService.Domain.Entities.Account;
 
 namespace AccountService.Application.Search
@@ -15,16 +17,19 @@ namespace AccountService.Application.Search
 
         public Expression<Func<Account, bool>> Build()
         {
+            if (!_predicates.Any())
+                throw new InvalidSpecificationException("No predicates provided!");
+
             foreach (var predicate in _predicates)
-                _predBuilder.And(predicate);
+                _predBuilder.Extend(predicate, PredicateOperator.And);
 
             return _predBuilder;
         }
 
-        public AccountSpecificationBuilder()
+        public AccountSpecificationBuilder(bool defaultExpression = true)
         {
             _predicates = new List<Expression<Func<Account, bool>>>();
-            _predBuilder = PredicateBuilder.New<Account>(true);
+            _predBuilder = PredicateBuilder.New<Account>(defaultExpression);
         }
 
         public AccountSpecificationBuilder WithId(ulong? id)
@@ -41,7 +46,7 @@ namespace AccountService.Application.Search
             if (string.IsNullOrWhiteSpace(name))
                 throw new InvalidSpecificationException("Wrong Name specified");
 
-            _predicates.Add(x => x.Name == name);
+            _predicates.Add(x => x.Name.Contains(name, StringComparison.InvariantCulture));
             return this;
         }
 

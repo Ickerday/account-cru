@@ -1,4 +1,5 @@
-﻿using AccountService.Domain.Entities;
+﻿using AccountService.Domain;
+using AccountService.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AccountService.Persistence.EfCore

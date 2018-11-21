@@ -41,9 +41,12 @@ namespace AccountService.Application.Accounts.Queries
 
         public IEnumerable<Account> FindWith(ISpecificationBuilder<Account> builder)
         {
-            _logger.LogInformation($"Searching for Accounts following a {builder.GetType().FullName}");
+            _logger.LogInformation($"Searching for Accounts following a {builder.GetType().Name}");
+            var compiledSpec = builder.Build()
+                .Compile();
+
             return _context.Accounts
-                .Where(builder.Build());
+                .Where(compiledSpec);
         }
     }
 }
