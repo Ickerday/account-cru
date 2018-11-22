@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { AccountListComponent } from './account-list/account-list.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AccountDetailComponent } from './account-detail/account-detail.component';
+import { AccountsClient } from './client/client';
 
 const appRoutes: Routes = [
   { path: 'accounts', component: AccountListComponent },
@@ -30,7 +31,9 @@ const appRoutes: Routes = [
       { enableTracing: !environment.production }
     )
   ],
-  providers: [],
+  providers: [
+    { provide: AccountsClient, useClass: AccountsClient }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
