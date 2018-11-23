@@ -60,7 +60,7 @@
       "promiseType": "Promise",
       "httpClass": "HttpClient",
       "useSingletonProvider": false,
-      "injectionTokenType": "OpaqueToken",
+      "injectionTokenType": "InjectionToken",
       "rxJsVersion": 6.0,
       "dateTimeType": "Date",
       "nullValue": "Undefined",
